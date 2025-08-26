@@ -1,0 +1,25 @@
+[package]
+name = "ml"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "inp"
+path = "ml/bin/inp.rs"
+
+[[bin]]
+name = "oup"
+path = "ml/bin/oup.rs"
+
+[lib]
+name = "ml"
+path = "ml/lib.rs"
+
+[dependencies]
+chumsky = { version = "0.10", features = ["pratt"] }
+ariadne = "0.5.1"
+either = "1.15.0"
+pretty = "0.12.4"
+serde = { version = "1.0.219" , features = ["derive"]}
+phf = { version = "0.11", features = ["macros"] }
+serde_json = "1.0.140"

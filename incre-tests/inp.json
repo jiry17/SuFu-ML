@@ -1,0 +1,232 @@
+[
+  {
+    "name" : "head",
+    "ty" : 
+    {
+      "body" : 
+      {
+        "s" : 
+        {
+          "name" : "list",
+          "params" : 
+          [
+            {
+              "name" : "'a",
+              "type" : "var"
+            }
+          ],
+          "type" : "cons"
+        },
+        "t" : 
+        {
+          "name" : "'a",
+          "type" : "var"
+        },
+        "type" : "arrow"
+      },
+      "type" : "poly",
+      "vars" : 
+      [
+        "'a"
+      ]
+    },
+    "type" : "declare"
+  },
+  {
+    "name" : "tails",
+    "ty" : 
+    {
+      "s" : 
+      {
+        "name" : "list",
+        "params" : 
+        [
+          {
+            "type" : "int"
+          }
+        ],
+        "type" : "cons"
+      },
+      "t" : 
+      {
+        "name" : "list",
+        "params" : 
+        [
+          {
+            "name" : "list",
+            "params" : 
+            [
+              {
+                "type" : "int"
+              }
+            ],
+            "type" : "cons"
+          }
+        ],
+        "type" : "cons"
+      },
+      "type" : "arrow"
+    },
+    "type" : "declare"
+  },
+  {
+    "name" : "sum",
+    "ty" : 
+    {
+      "s" : 
+      {
+        "name" : "list",
+        "params" : 
+        [
+          {
+            "type" : "int"
+          }
+        ],
+        "type" : "cons"
+      },
+      "t" : 
+      {
+        "type" : "int"
+      },
+      "type" : "arrow"
+    },
+    "type" : "declare"
+  },
+  {
+    "name" : "max",
+    "ty" : 
+    {
+      "s" : 
+      {
+        "type" : "int"
+      },
+      "t" : 
+      {
+        "s" : 
+        {
+          "type" : "int"
+        },
+        "t" : 
+        {
+          "type" : "int"
+        },
+        "type" : "arrow"
+      },
+      "type" : "arrow"
+    },
+    "type" : "declare"
+  },
+  {
+    "name" : "maximum",
+    "ty" : 
+    {
+      "s" : 
+      {
+        "name" : "list",
+        "params" : 
+        [
+          {
+            "type" : "int"
+          }
+        ],
+        "type" : "cons"
+      },
+      "t" : 
+      {
+        "type" : "int"
+      },
+      "type" : "arrow"
+    },
+    "type" : "declare"
+  },
+  {
+    "name" : "map",
+    "ty" : 
+    {
+      "body" : 
+      {
+        "s" : 
+        {
+          "s" : 
+          {
+            "name" : "'a",
+            "type" : "var"
+          },
+          "t" : 
+          {
+            "name" : "'b",
+            "type" : "var"
+          },
+          "type" : "arrow"
+        },
+        "t" : 
+        {
+          "s" : 
+          {
+            "name" : "list",
+            "params" : 
+            [
+              {
+                "name" : "'a",
+                "type" : "var"
+              }
+            ],
+            "type" : "cons"
+          },
+          "t" : 
+          {
+            "name" : "list",
+            "params" : 
+            [
+              {
+                "name" : "'b",
+                "type" : "var"
+              }
+            ],
+            "type" : "cons"
+          },
+          "type" : "arrow"
+        },
+        "type" : "arrow"
+      },
+      "type" : "poly",
+      "vars" : 
+      [
+        "'a",
+        "'b"
+      ]
+    },
+    "type" : "declare"
+  },
+  {
+    "name" : "mts",
+    "ty" : 
+    {
+      "s" : 
+      {
+        "name" : "list",
+        "params" : 
+        [
+          {
+            "type" : "int"
+          }
+        ],
+        "type" : "cons"
+      },
+      "t" : 
+      {
+        "type" : "int"
+      },
+      "type" : "arrow"
+    },
+    "type" : "declare"
+  },
+  {
+    "term" : 
+    {
+      "type" : "int",
+      "value" : 2
+    },
+    "type" : "eval"
+  }
+]

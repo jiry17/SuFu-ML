@@ -1,0 +1,483 @@
+[
+  {
+    "type": "type",
+    "name": "list",
+    "arity": 1,
+    "cons": [
+      {
+        "name": "Cons",
+        "type": {
+          "type": "poly",
+          "vars": [
+            "'a"
+          ],
+          "body": {
+            "type": "arrow",
+            "s": {
+              "type": "tuple",
+              "fields": [
+                {
+                  "type": "var",
+                  "index": 0
+                },
+                {
+                  "type": "cons",
+                  "name": "list",
+                  "params": [
+                    {
+                      "type": "var",
+                      "index": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            "t": {
+              "type": "cons",
+              "name": "list",
+              "params": [
+                {
+                  "type": "var",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "Nil",
+        "type": {
+          "type": "poly",
+          "vars": [
+            "'a"
+          ],
+          "body": {
+            "type": "arrow",
+            "s": {
+              "type": "unit"
+            },
+            "t": {
+              "type": "cons",
+              "name": "list",
+              "params": [
+                {
+                  "type": "var",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "type": "declare",
+    "name": "tails",
+    "ty": {
+      "type": "arrow",
+      "s": {
+        "type": "cons",
+        "name": "list",
+        "params": [
+          {
+            "type": "int"
+          }
+        ]
+      },
+      "t": {
+        "type": "cons",
+        "name": "list",
+        "params": [
+          {
+            "type": "cons",
+            "name": "list",
+            "params": [
+              {
+                "type": "int"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "func",
+    "name": "tails",
+    "def": {
+      "type": "func",
+      "name": "var0",
+      "content": {
+        "type": "match",
+        "cases": [
+          {
+            "pattern": {
+              "type": "cons",
+              "name": "Nil",
+              "content": {
+                "type": "underscore"
+              }
+            },
+            "branch": {
+              "type": "cons",
+              "name": "Nil",
+              "content": {
+                "type": "unit"
+              }
+            }
+          },
+          {
+            "pattern": {
+              "type": "var",
+              "name": "xs",
+              "content": {
+                "type": "cons",
+                "name": "Cons",
+                "content": {
+                  "type": "tuple",
+                  "fields": [
+                    {
+                      "type": "underscore"
+                    },
+                    {
+                      "type": "var",
+                      "name": "t"
+                    }
+                  ]
+                }
+              }
+            },
+            "branch": {
+              "type": "cons",
+              "name": "Cons",
+              "content": {
+                "type": "tuple",
+                "fields": [
+                  {
+                    "type": "var",
+                    "name": "xs"
+                  },
+                  {
+                    "type": "app",
+                    "func": {
+                      "type": "var",
+                      "name": "tails"
+                    },
+                    "param": {
+                      "type": "var",
+                      "name": "t"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "value": {
+          "type": "var",
+          "name": "var0"
+        }
+      }
+    }
+  },
+  {
+    "type": "func",
+    "name": "sum",
+    "def": {
+      "type": "func",
+      "name": "var0",
+      "content": {
+        "type": "match",
+        "cases": [
+          {
+            "pattern": {
+              "type": "cons",
+              "name": "Nil",
+              "content": {
+                "type": "underscore"
+              }
+            },
+            "branch": {
+              "type": "int",
+              "value": 0
+            }
+          },
+          {
+            "pattern": {
+              "type": "cons",
+              "name": "Cons",
+              "content": {
+                "type": "tuple",
+                "fields": [
+                  {
+                    "type": "var",
+                    "name": "h"
+                  },
+                  {
+                    "type": "var",
+                    "name": "t"
+                  }
+                ]
+              }
+            },
+            "branch": {
+              "type": "op",
+              "operator": "+",
+              "operand": [
+                {
+                  "type": "var",
+                  "name": "h"
+                },
+                {
+                  "type": "app",
+                  "func": {
+                    "type": "var",
+                    "name": "sum"
+                  },
+                  "param": {
+                    "type": "var",
+                    "name": "t"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "value": {
+          "type": "var",
+          "name": "var0"
+        }
+      }
+    }
+  },
+  {
+    "type": "bind",
+    "name": "max",
+    "def": {
+      "type": "if",
+      "condition": {
+        "type": "op",
+        "operator": "<=",
+        "operand": [
+          {
+            "type": "var",
+            "name": "a"
+          },
+          {
+            "type": "var",
+            "name": "b"
+          }
+        ]
+      },
+      "true": {
+        "type": "var",
+        "name": "b"
+      },
+      "false": {
+        "type": "var",
+        "name": "a"
+      }
+    }
+  },
+  {
+    "type": "func",
+    "name": "maximum",
+    "def": {
+      "type": "func",
+      "name": "var0",
+      "content": {
+        "type": "match",
+        "cases": [
+          {
+            "pattern": {
+              "type": "cons",
+              "name": "Cons",
+              "content": {
+                "type": "tuple",
+                "fields": [
+                  {
+                    "type": "var",
+                    "name": "h"
+                  },
+                  {
+                    "type": "cons",
+                    "name": "Nil",
+                    "content": {
+                      "type": "underscore"
+                    }
+                  }
+                ]
+              }
+            },
+            "branch": {
+              "type": "var",
+              "name": "h"
+            }
+          },
+          {
+            "pattern": {
+              "type": "cons",
+              "name": "Cons",
+              "content": {
+                "type": "tuple",
+                "fields": [
+                  {
+                    "type": "var",
+                    "name": "h"
+                  },
+                  {
+                    "type": "var",
+                    "name": "t"
+                  }
+                ]
+              }
+            },
+            "branch": {
+              "type": "app",
+              "func": {
+                "type": "app",
+                "func": {
+                  "type": "app",
+                  "func": {
+                    "type": "var",
+                    "name": "max"
+                  },
+                  "param": {
+                    "type": "var",
+                    "name": "h"
+                  }
+                },
+                "param": {
+                  "type": "var",
+                  "name": "maximum"
+                }
+              },
+              "param": {
+                "type": "var",
+                "name": "t"
+              }
+            }
+          }
+        ],
+        "value": {
+          "type": "var",
+          "name": "var0"
+        }
+      }
+    }
+  },
+  {
+    "type": "func",
+    "name": "map",
+    "def": {
+      "type": "func",
+      "name": "var0",
+      "content": {
+        "type": "match",
+        "cases": [
+          {
+            "pattern": {
+              "type": "cons",
+              "name": "Nil",
+              "content": {
+                "type": "underscore"
+              }
+            },
+            "branch": {
+              "type": "cons",
+              "name": "Nil",
+              "content": {
+                "type": "unit"
+              }
+            }
+          },
+          {
+            "pattern": {
+              "type": "cons",
+              "name": "Cons",
+              "content": {
+                "type": "tuple",
+                "fields": [
+                  {
+                    "type": "var",
+                    "name": "h"
+                  },
+                  {
+                    "type": "var",
+                    "name": "t"
+                  }
+                ]
+              }
+            },
+            "branch": {
+              "type": "cons",
+              "name": "Cons",
+              "content": {
+                "type": "tuple",
+                "fields": [
+                  {
+                    "type": "app",
+                    "func": {
+                      "type": "var",
+                      "name": "f"
+                    },
+                    "param": {
+                      "type": "var",
+                      "name": "h"
+                    }
+                  },
+                  {
+                    "type": "var",
+                    "name": "t"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "value": {
+          "type": "var",
+          "name": "var0"
+        }
+      }
+    }
+  },
+  {
+    "type": "bind",
+    "name": "mts",
+    "def": {
+      "type": "app",
+      "func": {
+        "type": "var",
+        "name": "maximum"
+      },
+      "param": {
+        "type": "app",
+        "func": {
+          "type": "app",
+          "func": {
+            "type": "var",
+            "name": "map"
+          },
+          "param": {
+            "type": "var",
+            "name": "sum"
+          }
+        },
+        "param": {
+          "type": "app",
+          "func": {
+            "type": "var",
+            "name": "tails"
+          },
+          "param": {
+            "type": "var",
+            "name": "xs"
+          }
+        }
+      }
+    }
+  }
+]

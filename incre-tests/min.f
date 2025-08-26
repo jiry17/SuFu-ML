@@ -1,0 +1,1 @@
+data LangA = One | Add LangA * LangA | Neg LangA;
