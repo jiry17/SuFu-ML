@@ -30,7 +30,9 @@ int main(int argc, char** argv) {
 
     std::string path = FLAGS_benchmark, target = FLAGS_output;
     bool is_autolabel = FLAGS_autolabel;
-    bool is_highlight_replace = FLAGS_mark_rewrite;
+    // TODO: implement this option
+    // bool is_highlight_replace = FLAGS_mark_rewrite;
+    bool is_highlight_replace = false;
     global::KStageInfoPath = FLAGS_stage_output_file;
 
     IncreProgram prog = io::parseFromF(path);

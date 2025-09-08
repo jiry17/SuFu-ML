@@ -13,8 +13,8 @@ fn main() {
 
     // let inp_file = args[1].clone();
     // let oup_file = args[2].clone();
-    let inp_file = "/tmp/282475249.json";
-    let oup_file = "/Users/pro/Desktop/work/2025S/SuFu-ML/incre-tests/res.f";
+    let inp_file = "/Users/pro/Desktop/work/2025S/SuFu-ML/interface/1327615887.json";
+    let oup_file = "/Users/pro/Desktop/work/2025S/SuFu-ML/interface/res.out";
 
     let file = File::open(inp_file).unwrap();
     let reader = BufReader::new(file);

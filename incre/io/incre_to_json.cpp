@@ -61,7 +61,7 @@ namespace {
 
         InitJsonWithType("poly");
         value["vars"] = _vec2json(named_type->name_list);
-        LOG(INFO) << "body " << named_type->body.get();
+        // LOG(INFO) << "body " << named_type->body.get();
         value["body"] = _type2json(named_type->body.get(), name_map);
         return value;
     }
@@ -111,7 +111,7 @@ namespace {
     }
 
     Json::Value _type2json(TypeData* type) {
-        LOG(INFO) << "type " << type->toString() << " to json";
+        // LOG(INFO) << "type " << type->toString() << " to json";
         return _type2json(type, {});
     }
 }
@@ -322,21 +322,24 @@ namespace {
 
     TermJsonHead(Label) {
         InitJsonWithType("app");
-        value["func"] = "label";
+        auto func_term = std::make_shared<TmVar>("label");
+        value["func"] = _term2json(func_term.get(), indices);
         value["param"] = _term2json(term->body.get(), indices);
         return value;
     }
 
     TermJsonHead(Unlabel) {
         InitJsonWithType("app");
-        value["func"] = "unlabel";
+        auto func_term = std::make_shared<TmVar>("unlabel");
+        value["func"] = _term2json(func_term.get(), indices);
         value["param"] = _term2json(term->body.get(), indices);
         return value;
     }
 
     TermJsonHead(Rewrite) {
         InitJsonWithType("app");
-        value["func"] = "rewrite";
+        auto func_term = std::make_shared<TmVar>("rewrite");
+        value["func"] = _term2json(func_term.get(), indices);
         value["param"] = _term2json(term->body.get(), indices);
         return value;
     }
@@ -438,7 +441,7 @@ namespace {
         auto body = std::make_shared<TmVar>(var_name);
         auto match_term = std::make_shared<TmMatch>(
                 std::make_shared<TmVar>(inp_name), std::vector<std::pair<Pattern, Term>>{ {pattern, body} }
-                );
+        );
         return std::make_shared<TmFunc>(inp_name, match_term);
     }
 }
@@ -456,7 +459,7 @@ Json::Value incre::io::program2json(incre::IncreProgramData *program) {
         auto name = _getProjName(id, size);
         auto command = std::make_shared<CommandBindTerm>(
                 name, false, term, DecorateSet(), std::string()
-                );
+        );
         result.append(_command2json(command.get(), indices));
     }
     for (auto& value: value_list)  result.append(value);
@@ -466,8 +469,11 @@ Json::Value incre::io::program2json(incre::IncreProgramData *program) {
 #include <fstream>
 #include <iostream>
 #include "istool/basic/config.h"
+#include <filesystem>
+#include <ctime>
 
 void incre::io::printProgram2F(const std::string &path, incre::IncreProgramData *program) {
+    std::srand(std::time(0));
     std::string tmp_file = "/tmp/" + std::to_string(rand()) + ".json";
     // std::string tmp_file = ::config::KSourcePath + "incre-tests/" + std::to_string(rand()) + ".json";
     auto json_value = program2json(program);
@@ -477,9 +483,9 @@ void incre::io::printProgram2F(const std::string &path, incre::IncreProgramData 
     builder["indentation"] = "  ";
     std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
     writer->write(json_value, &out);
+    out.close();
 
     std::string command = ::config::KIncrePrinterPath + " " + tmp_file + " " + path;
-    LOG(INFO) << command;
 
     std::system(command.c_str());
     // std::system(("rm " + tmp_file).c_str());

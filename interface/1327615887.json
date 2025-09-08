@@ -1,0 +1,846 @@
+[
+  {
+    "def" : 
+    {
+      "body" : 
+      {
+        "cases" : 
+        [
+          [
+            {
+              "fields" : 
+              [
+                {
+                  "name" : "y",
+                  "type" : "var"
+                },
+                {
+                  "type" : "underscore"
+                }
+              ],
+              "type" : "tuple"
+            },
+            {
+              "name" : "y",
+              "type" : "var"
+            }
+          ]
+        ],
+        "type" : "match",
+        "value" : 
+        {
+          "name" : "x",
+          "type" : "var"
+        }
+      },
+      "param" : "x",
+      "type" : "func"
+    },
+    "name" : "fst",
+    "type" : "bind"
+  },
+  {
+    "def" : 
+    {
+      "body" : 
+      {
+        "cases" : 
+        [
+          [
+            {
+              "fields" : 
+              [
+                {
+                  "type" : "underscore"
+                },
+                {
+                  "name" : "y",
+                  "type" : "var"
+                }
+              ],
+              "type" : "tuple"
+            },
+            {
+              "name" : "y",
+              "type" : "var"
+            }
+          ]
+        ],
+        "type" : "match",
+        "value" : 
+        {
+          "name" : "x",
+          "type" : "var"
+        }
+      },
+      "param" : "x",
+      "type" : "func"
+    },
+    "name" : "snd",
+    "type" : "bind"
+  },
+  {
+    "arity" : 1,
+    "cons" : 
+    [
+      [
+        "Cons",
+        {
+          "body" : 
+          {
+            "s" : 
+            {
+              "fields" : 
+              [
+                {
+                  "name" : "'a",
+                  "type" : "var"
+                },
+                {
+                  "name" : "list",
+                  "params" : 
+                  [
+                    {
+                      "name" : "'a",
+                      "type" : "var"
+                    }
+                  ],
+                  "type" : "cons"
+                }
+              ],
+              "type" : "tuple"
+            },
+            "t" : 
+            {
+              "name" : "list",
+              "params" : 
+              [
+                {
+                  "name" : "'a",
+                  "type" : "var"
+                }
+              ],
+              "type" : "cons"
+            },
+            "type" : "arrow"
+          },
+          "type" : "poly",
+          "vars" : 
+          [
+            "'a"
+          ]
+        }
+      ],
+      [
+        "Nil",
+        {
+          "body" : 
+          {
+            "s" : 
+            {
+              "type" : "unit"
+            },
+            "t" : 
+            {
+              "name" : "list",
+              "params" : 
+              [
+                {
+                  "name" : "'a",
+                  "type" : "var"
+                }
+              ],
+              "type" : "cons"
+            },
+            "type" : "arrow"
+          },
+          "type" : "poly",
+          "vars" : 
+          [
+            "'a"
+          ]
+        }
+      ]
+    ],
+    "name" : "list",
+    "type" : "type"
+  },
+  {
+    "def" : 
+    {
+      "body" : 
+      {
+        "cases" : 
+        [
+          [
+            {
+              "content" : 
+              {
+                "fields" : 
+                [
+                  {
+                    "name" : "h",
+                    "type" : "var"
+                  },
+                  {
+                    "type" : "underscore"
+                  }
+                ],
+                "type" : "tuple"
+              },
+              "name" : "Cons",
+              "type" : "cons"
+            },
+            {
+              "name" : "h",
+              "type" : "var"
+            }
+          ]
+        ],
+        "type" : "match",
+        "value" : 
+        {
+          "name" : "var0",
+          "type" : "var"
+        }
+      },
+      "param" : "var0",
+      "type" : "func"
+    },
+    "name" : "head",
+    "type" : "bind"
+  },
+  {
+    "name" : "tails",
+    "ty" : 
+    {
+      "s" : 
+      {
+        "name" : "list",
+        "params" : 
+        [
+          {
+            "type" : "int"
+          }
+        ],
+        "type" : "cons"
+      },
+      "t" : 
+      {
+        "fields" : 
+        [
+          {
+            "type" : "int"
+          },
+          {
+            "type" : "int"
+          }
+        ],
+        "type" : "tuple"
+      },
+      "type" : "arrow"
+    },
+    "type" : "declare"
+  },
+  {
+    "def" : 
+    {
+      "body" : 
+      {
+        "cases" : 
+        [
+          [
+            {
+              "content" : 
+              {
+                "type" : "underscore"
+              },
+              "name" : "Nil",
+              "type" : "cons"
+            },
+            {
+              "func" : "rewrite",
+              "param" : 
+              {
+                "fields" : 
+                [
+                  {
+                    "type" : "int",
+                    "value" : 0
+                  },
+                  {
+                    "type" : "int",
+                    "value" : 0
+                  }
+                ],
+                "type" : "tuple"
+              },
+              "type" : "app"
+            }
+          ],
+          [
+            {
+              "content" : 
+              {
+                "content" : 
+                {
+                  "fields" : 
+                  [
+                    {
+                      "name" : "h",
+                      "type" : "var"
+                    },
+                    {
+                      "name" : "t",
+                      "type" : "var"
+                    }
+                  ],
+                  "type" : "tuple"
+                },
+                "name" : "Cons",
+                "type" : "cons"
+              },
+              "name" : "xs",
+              "type" : "var"
+            },
+            {
+              "content" : 
+              {
+                "func" : "rewrite",
+                "param" : 
+                {
+                  "fields" : 
+                  [
+                    {
+                      "condition" : 
+                      {
+                        "operand" : 
+                        [
+                          {
+                            "operand" : 
+                            [
+                              {
+                                "name" : "h",
+                                "type" : "var"
+                              },
+                              {
+                                "func" : 
+                                {
+                                  "name" : "snd",
+                                  "type" : "var"
+                                },
+                                "param" : 
+                                {
+                                  "name" : "m1",
+                                  "type" : "var"
+                                },
+                                "type" : "app"
+                              }
+                            ],
+                            "operator" : "+",
+                            "type" : "op"
+                          },
+                          {
+                            "func" : 
+                            {
+                              "name" : "fst",
+                              "type" : "var"
+                            },
+                            "param" : 
+                            {
+                              "name" : "m1",
+                              "type" : "var"
+                            },
+                            "type" : "app"
+                          }
+                        ],
+                        "operator" : "<",
+                        "type" : "op"
+                      },
+                      "false" : 
+                      {
+                        "operand" : 
+                        [
+                          {
+                            "name" : "h",
+                            "type" : "var"
+                          },
+                          {
+                            "func" : 
+                            {
+                              "name" : "snd",
+                              "type" : "var"
+                            },
+                            "param" : 
+                            {
+                              "name" : "m1",
+                              "type" : "var"
+                            },
+                            "type" : "app"
+                          }
+                        ],
+                        "operator" : "+",
+                        "type" : "op"
+                      },
+                      "true" : 
+                      {
+                        "func" : 
+                        {
+                          "name" : "fst",
+                          "type" : "var"
+                        },
+                        "param" : 
+                        {
+                          "name" : "m1",
+                          "type" : "var"
+                        },
+                        "type" : "app"
+                      },
+                      "type" : "if"
+                    },
+                    {
+                      "operand" : 
+                      [
+                        {
+                          "name" : "h",
+                          "type" : "var"
+                        },
+                        {
+                          "func" : 
+                          {
+                            "name" : "snd",
+                            "type" : "var"
+                          },
+                          "param" : 
+                          {
+                            "name" : "m1",
+                            "type" : "var"
+                          },
+                          "type" : "app"
+                        }
+                      ],
+                      "operator" : "+",
+                      "type" : "op"
+                    }
+                  ],
+                  "type" : "tuple"
+                },
+                "type" : "app"
+              },
+              "def" : 
+              {
+                "func" : 
+                {
+                  "name" : "tails",
+                  "type" : "var"
+                },
+                "param" : 
+                {
+                  "name" : "t",
+                  "type" : "var"
+                },
+                "type" : "app"
+              },
+              "name" : "m1",
+              "type" : "let"
+            }
+          ]
+        ],
+        "type" : "match",
+        "value" : 
+        {
+          "name" : "var0",
+          "type" : "var"
+        }
+      },
+      "param" : "var0",
+      "type" : "func"
+    },
+    "name" : "tails",
+    "type" : "func"
+  },
+  {
+    "def" : 
+    {
+      "body" : 
+      {
+        "cases" : 
+        [
+          [
+            {
+              "content" : 
+              {
+                "type" : "underscore"
+              },
+              "name" : "Nil",
+              "type" : "cons"
+            },
+            {
+              "type" : "int",
+              "value" : 0
+            }
+          ],
+          [
+            {
+              "content" : 
+              {
+                "fields" : 
+                [
+                  {
+                    "name" : "h",
+                    "type" : "var"
+                  },
+                  {
+                    "name" : "t",
+                    "type" : "var"
+                  }
+                ],
+                "type" : "tuple"
+              },
+              "name" : "Cons",
+              "type" : "cons"
+            },
+            {
+              "operand" : 
+              [
+                {
+                  "name" : "h",
+                  "type" : "var"
+                },
+                {
+                  "func" : 
+                  {
+                    "name" : "sum",
+                    "type" : "var"
+                  },
+                  "param" : 
+                  {
+                    "name" : "t",
+                    "type" : "var"
+                  },
+                  "type" : "app"
+                }
+              ],
+              "operator" : "+",
+              "type" : "op"
+            }
+          ]
+        ],
+        "type" : "match",
+        "value" : 
+        {
+          "name" : "var0",
+          "type" : "var"
+        }
+      },
+      "param" : "var0",
+      "type" : "func"
+    },
+    "name" : "sum",
+    "type" : "func"
+  },
+  {
+    "def" : 
+    {
+      "body" : 
+      {
+        "body" : 
+        {
+          "condition" : 
+          {
+            "operand" : 
+            [
+              {
+                "name" : "a",
+                "type" : "var"
+              },
+              {
+                "name" : "b",
+                "type" : "var"
+              }
+            ],
+            "operator" : "<=",
+            "type" : "op"
+          },
+          "false" : 
+          {
+            "name" : "a",
+            "type" : "var"
+          },
+          "true" : 
+          {
+            "name" : "b",
+            "type" : "var"
+          },
+          "type" : "if"
+        },
+        "param" : "b",
+        "type" : "func"
+      },
+      "param" : "a",
+      "type" : "func"
+    },
+    "name" : "max",
+    "type" : "bind"
+  },
+  {
+    "def" : 
+    {
+      "body" : 
+      {
+        "cases" : 
+        [
+          [
+            {
+              "content" : 
+              {
+                "fields" : 
+                [
+                  {
+                    "name" : "h",
+                    "type" : "var"
+                  },
+                  {
+                    "content" : 
+                    {
+                      "type" : "underscore"
+                    },
+                    "name" : "Nil",
+                    "type" : "cons"
+                  }
+                ],
+                "type" : "tuple"
+              },
+              "name" : "Cons",
+              "type" : "cons"
+            },
+            {
+              "name" : "h",
+              "type" : "var"
+            }
+          ],
+          [
+            {
+              "content" : 
+              {
+                "fields" : 
+                [
+                  {
+                    "name" : "h",
+                    "type" : "var"
+                  },
+                  {
+                    "name" : "t",
+                    "type" : "var"
+                  }
+                ],
+                "type" : "tuple"
+              },
+              "name" : "Cons",
+              "type" : "cons"
+            },
+            {
+              "func" : 
+              {
+                "func" : 
+                {
+                  "name" : "max",
+                  "type" : "var"
+                },
+                "param" : 
+                {
+                  "name" : "h",
+                  "type" : "var"
+                },
+                "type" : "app"
+              },
+              "param" : 
+              {
+                "func" : 
+                {
+                  "name" : "maximum",
+                  "type" : "var"
+                },
+                "param" : 
+                {
+                  "name" : "t",
+                  "type" : "var"
+                },
+                "type" : "app"
+              },
+              "type" : "app"
+            }
+          ]
+        ],
+        "type" : "match",
+        "value" : 
+        {
+          "name" : "var0",
+          "type" : "var"
+        }
+      },
+      "param" : "var0",
+      "type" : "func"
+    },
+    "name" : "maximum",
+    "type" : "func"
+  },
+  {
+    "def" : 
+    {
+      "body" : 
+      {
+        "body" : 
+        {
+          "cases" : 
+          [
+            [
+              {
+                "content" : 
+                {
+                  "type" : "underscore"
+                },
+                "name" : "Nil",
+                "type" : "cons"
+              },
+              {
+                "content" : 
+                {
+                  "type" : "unit"
+                },
+                "name" : "Nil",
+                "type" : "cons"
+              }
+            ],
+            [
+              {
+                "content" : 
+                {
+                  "fields" : 
+                  [
+                    {
+                      "name" : "h",
+                      "type" : "var"
+                    },
+                    {
+                      "name" : "t",
+                      "type" : "var"
+                    }
+                  ],
+                  "type" : "tuple"
+                },
+                "name" : "Cons",
+                "type" : "cons"
+              },
+              {
+                "content" : 
+                {
+                  "fields" : 
+                  [
+                    {
+                      "func" : 
+                      {
+                        "name" : "f",
+                        "type" : "var"
+                      },
+                      "param" : 
+                      {
+                        "name" : "h",
+                        "type" : "var"
+                      },
+                      "type" : "app"
+                    },
+                    {
+                      "func" : 
+                      {
+                        "func" : 
+                        {
+                          "name" : "map",
+                          "type" : "var"
+                        },
+                        "param" : 
+                        {
+                          "name" : "f",
+                          "type" : "var"
+                        },
+                        "type" : "app"
+                      },
+                      "param" : 
+                      {
+                        "name" : "t",
+                        "type" : "var"
+                      },
+                      "type" : "app"
+                    }
+                  ],
+                  "type" : "tuple"
+                },
+                "name" : "Cons",
+                "type" : "cons"
+              }
+            ]
+          ],
+          "type" : "match",
+          "value" : 
+          {
+            "name" : "var0",
+            "type" : "var"
+          }
+        },
+        "param" : "var0",
+        "type" : "func"
+      },
+      "param" : "f",
+      "type" : "func"
+    },
+    "name" : "map",
+    "type" : "func"
+  },
+  {
+    "def" : 
+    {
+      "body" : 
+      {
+        "content" : 
+        {
+          "func" : "rewrite",
+          "param" : 
+          {
+            "func" : 
+            {
+              "name" : "fst",
+              "type" : "var"
+            },
+            "param" : 
+            {
+              "name" : "m3",
+              "type" : "var"
+            },
+            "type" : "app"
+          },
+          "type" : "app"
+        },
+        "def" : 
+        {
+          "func" : 
+          {
+            "name" : "tails",
+            "type" : "var"
+          },
+          "param" : 
+          {
+            "name" : "xs",
+            "type" : "var"
+          },
+          "type" : "app"
+        },
+        "name" : "m3",
+        "type" : "let"
+      },
+      "param" : "xs",
+      "type" : "func"
+    },
+    "name" : "mts",
+    "type" : "bind"
+  }
+]
