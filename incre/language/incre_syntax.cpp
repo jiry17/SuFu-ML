@@ -64,6 +64,14 @@ std::string TmProj::toString() const {
     return body->toString() + "." + std::to_string(id) + "/" + std::to_string(size);
 }
 
+#define TypeTypeCase(Name) case TypeType::TYPE_TOKEN_ ## Name: return #Name;
+
+std::string incre::syntax::typeType2String(incre::syntax::TypeType type) {
+    switch (type) {
+        TYPE_CASE_ANALYSIS(TypeTypeCase)
+    }
+}
+
 std::string incre::syntax::termType2String(TermType type) {
     switch (type) {
         case TermType::VALUE : return "VALUE";

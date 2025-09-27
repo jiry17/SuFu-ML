@@ -19,12 +19,24 @@ where
     let id = select_ref! {Token::Id(name) => String::from(name)};
     let cons = select_ref! {Token::Cons(name) => String::from(name)};
     let var = select_ref! {Token::Var(name) => String::from(name)};
-    let var_list = var.repeated().collect::<Vec<_>>();
+
+    let single_var = var.clone().map(|name| vec![name]);
+    let make_input_copy = make_input.clone();
+
+    let multi_var = var.clone()
+        .separated_by(just(Token::Comma))
+        .at_least(2)
+        .collect::<Vec<_>>()
+        .nested_in(
+            select_ref! { Token::Parens(ts) = e => make_input_copy(e.span(), ts) }
+        );
+
+    let var_list = choice((single_var, multi_var));
 
     let type_parser = make_type_parser(make_input.clone());
     // type rename
     let type_alias_parser = just(Token::Type)
-        .ignore_then(var_list)
+        .ignore_then(var_list.clone())
         .then(id)
         .then_ignore(just(Token::Eq))
         .then(type_parser.clone())

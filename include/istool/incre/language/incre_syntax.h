@@ -15,6 +15,8 @@ namespace incre::syntax {
         VAR, UNIT, BOOL, INT, POLY, ARR, TUPLE, IND, COMPRESS
     };
 
+    std::string typeType2String(TypeType type);
+
     class TypeData {
     public:
         TypeType type;
