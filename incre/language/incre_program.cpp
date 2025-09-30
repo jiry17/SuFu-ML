@@ -74,6 +74,10 @@ incre::DefaultContextBuilder::DefaultContextBuilder(incre::semantics::IncreEvalu
                                                     evaluator(_evaluator), checker(_checker), ctx(nullptr) {
 }
 
+incre::types::IncreTypeChecker *DefaultContextBuilder::getTypeChecker() const {
+    return checker;
+}
+
 void incre::DefaultContextBuilder::visit(CommandBindTerm *command) {
     // LOG(INFO) << "processing bind term " << command->name << " " << command->is_rec;
     if (ctx.isContain(command->name)) {

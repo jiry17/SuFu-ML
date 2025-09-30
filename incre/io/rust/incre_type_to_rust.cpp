@@ -47,11 +47,11 @@ namespace {
 #define TypeSignatureHead(Name) std::string __buildTypeSignature(Ty ## Name* type, TypeSignatureContext& ctx)
 #define TypeSignatureCase(Name) case TypeType::TYPE_TOKEN_ ## Name: return __buildTypeSignature(dynamic_cast<Ty ## Name*>(type), ctx);
 
-    TypeSignatureHead(Int) {return "i32";}
+    TypeSignatureHead(Int) {return util::wrapWithRc("i32");}
 
-    TypeSignatureHead(Bool) {return "bool";}
+    TypeSignatureHead(Bool) {return util::wrapWithRc("bool");}
 
-    TypeSignatureHead(Unit) {return "()";}
+    TypeSignatureHead(Unit) {return util::wrapWithRc("()");}
 
     TypeSignatureHead(Tuple) {
         std::string result;
@@ -176,6 +176,7 @@ void incre::rust::util::indDef2Rust(std::ostream &out, incre::CommandDef *comman
     auto result = util::buildTypeSignature(cons_name_list, full_type.get());
     assert(result.params.size() == command->param);
     auto type_name = result.oup.substr(3, result.oup.size() - 4);
+    out << "#[derive(Clone)]" << std::endl;
     out << "enum " << type_name << " {" << std::endl;
     for (auto& [cons_name, cons_type_name]: result.inp_list) {
         out << indent(1) << cons_name << "(" << cons_type_name << ")," << std::endl;

@@ -62,7 +62,7 @@ EnvAddress *IncreContext::getAddress(const std::string &name) {
     LOG(FATAL) << "Nothing is bound to " << name;
 }
 
-bool IncreContext::isContain(const std::string &name) {
+bool IncreContext::isContain(const std::string &name) const {
     for (auto now = start; now; now = now->next) {
         if (now->name == name) return true;
     }

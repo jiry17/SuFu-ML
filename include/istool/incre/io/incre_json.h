@@ -36,7 +36,9 @@ namespace incre::io {
     IncreProgram parseFromF(const std::string& path);
 
     Json::Value program2json(IncreProgramData* program);
-    void printProgram2F(const std::string& path, IncreProgramData* program);
+
+    extern bool is_keep_rewrite;
+    void printProgram2F(const std::string& path, IncreProgramData* program, bool is_highlight_rewrite);
 }
 
 #endif //ISTOOL_INCRE_JSON_H

@@ -5,7 +5,6 @@ type 'a list =
 let head = function
 | Cons (h, _) -> h
 
-val tails: int list -> ((int list) list) compress
 let rec tails = function
 | Nil -> Cons (Nil, Nil)
 | Cons (h, t) as xs ->

@@ -124,6 +124,7 @@ namespace incre {
         std::unordered_map<std::string, EnvAddress*> address_map;
         DefaultContextBuilder(incre::semantics::IncreEvaluator* _evaluator, incre::types::IncreTypeChecker* _checker);
         virtual ~DefaultContextBuilder() = default;
+        virtual incre::types::IncreTypeChecker* getTypeChecker() const;
     protected:
         incre::semantics::IncreEvaluator* evaluator;
         incre::types::IncreTypeChecker* checker;

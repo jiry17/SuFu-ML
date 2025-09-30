@@ -337,11 +337,15 @@ namespace {
     }
 
     TermJsonHead(Rewrite) {
-        InitJsonWithType("app");
-        auto func_term = std::make_shared<TmVar>("rewrite");
-        value["func"] = _term2json(func_term.get(), indices);
-        value["param"] = _term2json(term->body.get(), indices);
-        return value;
+        if (incre::io::is_keep_rewrite) {
+            InitJsonWithType("app");
+            auto func_term = std::make_shared<TmVar>("rewrite");
+            value["func"] = _term2json(func_term.get(), indices);
+            value["param"] = _term2json(term->body.get(), indices);
+            return value;
+        } else {
+            return _term2json(term->body.get(), indices);
+        }
     }
 
     std::string _getProjName(int id, int size) {
@@ -472,8 +476,11 @@ Json::Value incre::io::program2json(incre::IncreProgramData *program) {
 #include <filesystem>
 #include <ctime>
 
-void incre::io::printProgram2F(const std::string &path, incre::IncreProgramData *program) {
+bool incre::io::is_keep_rewrite = false;
+
+void incre::io::printProgram2F(const std::string &path, incre::IncreProgramData *program, bool is_highlight_rewrite) {
     std::srand(std::time(0));
+    is_keep_rewrite = is_highlight_rewrite;
     std::string tmp_file = "/tmp/" + std::to_string(rand()) + ".json";
     // std::string tmp_file = ::config::KSourcePath + "incre-tests/" + std::to_string(rand()) + ".json";
     auto json_value = program2json(program);
@@ -486,6 +493,8 @@ void incre::io::printProgram2F(const std::string &path, incre::IncreProgramData 
     out.close();
 
     std::string command = ::config::KIncrePrinterPath + " " + tmp_file + " " + path;
+
+    LOG(INFO) << command;
 
     std::system(command.c_str());
     // std::system(("rm " + tmp_file).c_str());

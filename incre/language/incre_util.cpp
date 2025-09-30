@@ -3,6 +3,7 @@
 //
 
 #include "istool/incre/language/incre_util.h"
+#include <ranges>
 #include "glog/logging.h"
 
 using namespace incre;
@@ -314,4 +315,28 @@ syntax::Ty util::removeBoundedVar(const syntax::Ty &type) {
     auto res = rewriter->rewrite(type);
     delete rewriter;
     return res;
+}
+
+namespace {
+    class VariableRenamer: public IncreTermRewriter {
+    public:
+        std::string name, new_name;
+        VariableRenamer(const std::string& _name, const std::string& _new_name): name(_name), new_name(_new_name) {}
+
+        Term rewrite(const Term& term) override {
+            auto free_variables = getFreeVariables(term.get());
+            if (std::ranges::find(free_variables, name) == free_variables.end()) return term;
+            return IncreTermRewriter::rewrite(term);
+        }
+
+        Term _rewrite(TmVar* var, const Term& term) override {
+            assert(var->name == name);
+            return std::make_shared<TmVar>(new_name);
+        }
+    };
+}
+
+syntax::Term util::renameVariable(const syntax::Term &term, const std::string &name, const std::string &new_name) {
+    VariableRenamer renamer(name, new_name);
+    return renamer.rewrite(term);
 }

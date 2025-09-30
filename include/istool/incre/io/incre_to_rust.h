@@ -9,6 +9,14 @@
 #include <iostream>
 
 namespace incre::rust {
+    class TranslationError: std::exception {
+    public:
+        std::string message;
+
+        TranslationError(const std::string& _info, const std::string& _position);
+        virtual const char* what() const noexcept;
+    };
+
     namespace util {
         struct TypeSignature {
             std::vector<std::pair<std::string, std::string>> params;
@@ -30,22 +38,23 @@ namespace incre::rust {
 
         std::string funcSignature2String(const TypeSignature &signature, const std::string &func_name);
 
-        struct RecursiveFunctionInfo {
-            std::string name, global_params;
-
-            RecursiveFunctionInfo(const std::string &name, const TypeSignature &info);
-
-            std::string buildFunctionCall(const std::string &input);
+        struct RustContextEntry {
+            std::string name, expr;
+            std::shared_ptr<RustContextEntry> next_entry;
+            RustContextEntry(const std::string& _name, const std::string& _expr, const std::shared_ptr<RustContextEntry>& _entry);
         };
 
-        std::pair<std::string, std::vector<std::string>>
-        function2Rust(const syntax::Term& term, const IncreContext& global, const std::optional<std::string>& _func_name,
-                      const std::unordered_map<std::string, RecursiveFunctionInfo>& func_infos)
+        struct RustContext {
+            std::shared_ptr<RustContextEntry> start;
 
-        std::pair<RecursiveFunctionInfo, std::vector<std::string>>
-        function2Rust(const syntax::Term &term, const IncreContext &ctx,
-                      const std::optional<std::string> &name,
-                      const std::unordered_map<std::string, RecursiveFunctionInfo> &rec_infos);
+            RustContextEntry* lookup(const std::string& name, bool is_strict=true) const;
+            RustContext insert(const std::string& _name, const std::string& _expr) const;
+            RustContext(const std::shared_ptr<RustContextEntry>& _start = nullptr);
+        };
+
+        std::pair<RustContext, std::vector<std::string>>
+        function2Rust(const syntax::Term& term, const IncreContext& global, const std::string& func_name,
+                      const RustContext& rust_ctx, incre::types::IncreTypeChecker* checker);
     }
 
     void program2Rust(std::ostream& out, IncreProgramData* program);

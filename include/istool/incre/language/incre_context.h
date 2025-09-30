@@ -23,7 +23,7 @@ namespace incre {
         syntax::Ty getRawType(const std::string& _name) const;
         syntax::Ty getFinalType(const std::string& _name, syntax::IncreTypeRewriter* rewriter) const;
         Data getData(const std::string& _name) const;
-        bool isContain(const std::string& name);
+        bool isContain(const std::string& name) const;
         EnvAddress* getAddress(const std::string& name);
         void printTypes() const;
         void printDatas() const;

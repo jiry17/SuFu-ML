@@ -19,6 +19,7 @@ namespace incre::util {
     syntax::Ty removeBoundedVar(const syntax::Ty& type);
 
     std::vector<std::string> getFreeVariables(syntax::TermData* term);
+    syntax::Term renameVariable(const syntax::Term& term, const std::string& name, const std::string& new_name);
 }
 
 #endif //ISTOOL_INCER_UTIL_H

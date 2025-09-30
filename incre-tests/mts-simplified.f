@@ -2,31 +2,33 @@ type 'a list =
 | Cons of 'a * 'a list
 | Nil
 
-let head = function
-| Cons (h, _) -> h
+let fst = function
+| (x, _) -> x
 
-val tails: int list -> ((int list) list) compress
+let snd = function
+| (_, x) -> x
+
+let head = function
+| Cons xs -> fst xs
+
 let rec tails = function
 | Nil -> Cons (Nil, Nil)
-| Cons (h, t) as xs ->
-  Cons (xs, tails t)
+| Cons xs ->
+  Cons (fst xs, tails (Cons xs))
 
 let rec sum = function
 | Nil -> 0
-| Cons (h, t) -> h + sum t
+| Cons xs -> (fst xs) + sum (snd xs)
 
 let max a b =
   if a <= b then b else a
 
 let rec maximum = function
-| Cons (h, t) ->
-  match t with
-  | Nil _ -> h
-  | _ -> max h (maximum t)
+| _ -> 0
 
 let rec map f = function
 | Nil -> Nil
-| Cons (h, t) -> Cons (f h, map f t)
+| Cons xs -> Cons (f (fst xs), map f (snd xs))
 
 let mts xs =
   maximum (map sum (tails xs))

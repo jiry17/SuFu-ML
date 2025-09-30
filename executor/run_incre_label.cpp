@@ -92,6 +92,5 @@ int main(int argc, char** argv) {
     auto res_prog = rewriteWithIncreSolution(incre_info->program.get(), res, is_highlight_replace);
 
     res_prog = incre::util::removeTrivialLetForProgram(res_prog.get());
-
-    incre::io::printProgram2F(target, res_prog.get());
+    incre::io::printProgram2F(target, res_prog.get(), is_highlight_replace);
 }
