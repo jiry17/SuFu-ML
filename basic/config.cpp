@@ -6,8 +6,21 @@
 #include "glog/logging.h"
 
 using namespace std::literals;
+
+#ifdef LINUX
 const std::string config::KSourcePath = SOURCEPATH + "/"s;
+#else
+const std::string config::KSourcePath =  "/Users/pro/Desktop/work/2025S/SuFu-ML/";
+#endif
+
+#ifdef LINUX
 const std::string config::KIncreParserPath = SOURCEPATH + "/surface/"s;
+#else
+// const std::string config::KIncreParserPath = "/Users/pro/Desktop/work/2025S/SuFu-ML/surface/"s;
+const std::string config::KIncreParserPath = "/Users/pro/Desktop/work/2025S/SuFu-ML/interface/target/release/inp";
+const std::string config::KIncrePrinterPath = "/Users/pro/Desktop/work/2025S/SuFu-ML/interface/target/release/oup";
+#endif
+
 const bool config::KIsDefaultSelf = true;
 
 std::string global::KStageInfoPath = "";
