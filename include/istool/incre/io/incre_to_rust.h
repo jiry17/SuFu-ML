@@ -34,7 +34,7 @@ namespace incre::rust {
 
         syntax::Ty unfoldBoundVariable(const syntax::Ty &raw_type);
 
-        std::string getAuxFuncName();
+        std::string getAuxFuncName(bool is_move=true);
 
         std::string funcSignature2String(const TypeSignature &signature, const std::string &func_name);
 

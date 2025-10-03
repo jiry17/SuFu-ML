@@ -69,7 +69,7 @@ syntax::Ty types::getPrimaryType(const std::string &name) {
         return std::make_shared<TyPoly>((std::vector<int>){0}, type);
     }
     if (KIntCompareOp.find(name) != std::string::npos) return TARR(TINT, TARR(TINT, TBOOL));
-    if (name == "and" || name == "or") return TARR(TBOOL, TARR(TBOOL, TBOOL));
+    if (name == "and" || name == "or" || name == "&&" || name == "||") return TARR(TBOOL, TARR(TBOOL, TBOOL));
     if (name == "neg") return TARR(TINT, TINT);
     if (name == "not") return TARR(TBOOL, TBOOL);
     throw IncreTypingError("Unknown primary operator " + name);

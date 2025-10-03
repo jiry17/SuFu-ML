@@ -105,6 +105,7 @@ void incre::DefaultContextBuilder::visit(CommandBindTerm *command) {
             auto v = evaluator->evaluate(command->term.get(), ctx);
             address->bind.data = v;
         }
+        // LOG(INFO) << "type " << address->bind.type->toString();
     } else {
         Ty type = nullptr;
         if (checker) {
@@ -112,6 +113,7 @@ void incre::DefaultContextBuilder::visit(CommandBindTerm *command) {
             checker->pushLevel(); type = checker->typing(command->term.get(), ctx);
             checker->popLevel(); type = checker->generalize(type, command->term.get());
         }
+        // LOG(INFO) << "type " << type->toString();
         auto res = evaluator ? evaluator->evaluate(command->term.get(), ctx): Data();
         ctx = ctx.insert(command->name, Binding(false, type, res));
     }
@@ -129,6 +131,9 @@ void incre::DefaultContextBuilder::visit(CommandEval* command) {
 void incre::DefaultContextBuilder::visit(CommandDeclare *command) {
     if (ctx.isContain(command->name)) LOG(FATAL) << "Duplicated name " << command->name;
     ctx = ctx.insert(command->name, command->type);
+    if (command->isDecrorateWith(CommandDecorate::INPUT)) {
+        address_map[command->name] = ctx.getAddress(command->name);
+    }
 }
 
 IncreFullContext incre::buildContext(IncreProgramData *program, semantics::IncreEvaluator *evaluator, types::IncreTypeChecker *checker) {

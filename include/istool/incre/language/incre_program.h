@@ -15,7 +15,7 @@ namespace incre {
     };
 
     enum class CommandDecorate {
-        INPUT, START, SYN_EXTRACT, SYN_COMBINE, SYN_COMPRESS, SYN_EXCLUDE, SYN_NO_PARTIAL, TERM_NUM
+        INPUT, START, SYN_EXTRACT, SYN_COMBINE, SYN_COMPRESS, SYN_EXCLUDE, ALLOW_PARTIAL
     };
 
     typedef std::unordered_set<CommandDecorate> DecorateSet;
@@ -69,6 +69,7 @@ namespace incre {
         SAMPLE_INT_MIN, /*Int Min of Sample, Default -5*/
         NON_LINEAR, /*Whether consider * in synthesis, default false*/
         ENABLE_FOLD, /*Whether consider `fold` operator on data structures in synthesis, default false*/
+        ENABLE_DEEPCODER, /*Whether consider `deepcoder` operators */
         TERM_NUM, /*Number of terms considered by PolyGen*/
         CLAUSE_NUM, /*Number of terms considered by PolyGen*/
         PRINT_ALIGN, /*Whether print align results to the result*/
@@ -94,6 +95,7 @@ namespace incre {
         extern const std::string KVerifyBaseName;
         extern const std::string KDataSizeLimitName;
         extern const std::string KIsEnableFoldName;
+        extern const std::string KIsEnableDeepCoder;
         extern const std::string KSampleIntMinName;
         extern const std::string KSampleIntMaxName;
         extern const std::string KPrintAlignName;

@@ -25,7 +25,7 @@ let lib_min a b = if a < b then a else b
 let lib_max a b = if a > b then a else b
 
 @Align
-let lib_maximum xs = lib_fold lib_max (-lib_inf) xs
+let lib_maximum xs = lib_fold lib_max (0 - lib_inf) xs
 
 @Align
 let lib_minimum xs = lib_fold lib_min lib_inf xs
@@ -45,11 +45,11 @@ let lib_head = function
 
 @Align let lib_dec x = x - 1
 
-@Align let lib_neg x = -x
+@Align let lib_neg x = 0 - x
 
 @Align
 let rec lib_last = function
-| Nil -> lib_error
+| Nil -> lib_err
 | Cons (h, t) ->
   match t with
   | Nil -> h
@@ -59,7 +59,7 @@ let rec lib_last = function
 let lib_access pos xs =
   let len = lib_length xs in
   let ind = if pos < 0 then pos + len else pos in
-  if ind < 0 or ind >= len then
+  if ind < 0 || ind >= len then
     lib_err
   else let rec visit v = function
   | Cons (h, t) ->
@@ -69,14 +69,14 @@ let lib_access pos xs =
 @Align
 let rec lib_count p = function
 | Nil -> 0
-| Cons (h, t) -> if p h then lib_count t + 1 else lib_count t
+| Cons (h, t) -> if p h then (lib_count p t) + 1 else lib_count p t
 
 @Align
 let lib_take pos xs =
   let len = lib_length xs in
   let ind = if pos < 0 then pos + len else pos in
-  if ind < 0 or ind >= len then
-    lib_error
+  if ind < 0 || ind >= len then
+    Nil
   else let rec visit v = function
   | Nil -> Nil
   | Cons (h, t) ->
@@ -87,13 +87,13 @@ let lib_take pos xs =
 let lib_drop pos xs =
   let len = lib_length xs in
   let ind = if pos < 0 then pos + len else pos in
-  if ind < 0 or ind >= len then
-    lib_error
+  if ind < 0 || ind >= len then
+    Nil
   else let rec visit v = function
   | Nil -> Nil
   | Cons (h, t) ->
     if v == 0 then Cons(h, t) else visit (v - 1) t
-  in vist ind xs
+  in visit ind xs
 
 @Align
 let lib_rev xs =
@@ -120,18 +120,6 @@ let rec lib_zip op xs = function
   | Nil -> Nil
   | Cons (x, xt) -> Cons (op x y, lib_zip op xt yt)
 
-@Exclude let rec lib_concat xs ys = match xs with
-| Nil -> ys
-| Cons (h, t) -> Cons (h, lib_concat t ys)
-
-@Align
-let rec lib_sort = function
-| Nil -> Nil
-| Cons (h, t) ->
-  let l = lib_filter (fun a -> a < h) t in
-  let r = lib_filter (fun a -> a >= h) t in
-  lib_concat l (Cons (h, r))
-
 @Align
 let lib_scanl op = function
 | Nil -> Nil
@@ -149,7 +137,8 @@ let rec lib_scanr op = function
   | Nil -> Cons (h, t)
   | Cons (ih, it) ->
     let res = lib_scanr op t in
-    Cons (op ih (lib_head res), res)
+    match res with
+    | Cons (rh, _) -> Cons (op ih rh, res)
 
 @Align
 let lib_isneg a = a < 0
@@ -163,6 +152,6 @@ let lib_iseven a = a == (a / 2 * 2)
 @Align
 let lib_isodd a = not (lib_iseven a)
 
-@Align let one = 1
+@Align let lib_one = 1
 
-@Align let none = -1
+@Align let lib_none = -1

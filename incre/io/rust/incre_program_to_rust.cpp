@@ -32,9 +32,11 @@ Ty util::unfoldBoundVariable(const syntax::Ty &raw_type) {
     return rewriter.rewrite(raw_type);
 }
 
-std::string util::getAuxFuncName() {
+std::string util::getAuxFuncName(bool is_move) {
     static int index = 0;
-    return "aux" + std::to_string(index);
+    auto name = "aux" + std::to_string(index);
+    if (is_move) index += 1;
+    return name;
 }
 
 util::RustContextEntry::RustContextEntry(const std::string &_name, const std::string &_expr,
@@ -51,6 +53,7 @@ util::RustContextEntry *util::RustContext::lookup(const std::string &name, bool 
     for (auto current = start; current; current = current->next_entry) {
         if (current->name == name) return current.get();
     }
+    if (is_strict) LOG(FATAL) << "unknown variable " << name;
     return nullptr;
 }
 
@@ -231,6 +234,28 @@ void incre::rust::program2Rust(std::ostream &out, incre::IncreProgramData *progr
     util::RustContext rust_ctx;
     out << "use std::rc::Rc;" << std::endl;
 
+    // adhoc process for TermDeclare
+    std::unordered_set<std::string> defined_names;
+    for (auto& command: program->commands) {
+        if (command->getType() == CommandType::BIND_TERM) {
+            defined_names.insert(command->name);
+        }
+    }
+
+    for (auto& command: program->commands) {
+        if (command->getType() != CommandType::DECLARE || defined_names.contains(command->name)) continue;
+        auto* cd = dynamic_cast<CommandDeclare*>(command.get());
+        Term default_term;
+        if (cd->type->getType() == TypeType::INT) {
+            default_term = std::make_shared<TmValue>(BuildData(Int, 0));
+        } else if (cd->type->getType() == TypeType::BOOL) {
+            default_term = std::make_shared<TmValue>(BuildData(Bool, false));
+        } else {
+            LOG(FATAL) << "unexpected type " << cd->type->toString();
+        }
+        command = std::make_shared<CommandBindTerm>(command->name, false, default_term, command->decos, command->source);
+    }
+
     for (auto& command: program->commands) {
         switch (command->getType()) {
             case CommandType::EVAL: break;
@@ -245,19 +270,32 @@ void incre::rust::program2Rust(std::ostream &out, incre::IncreProgramData *progr
             case CommandType::DECLARE: break;
             case CommandType::BIND_TERM: {
                 auto* cb = dynamic_cast<CommandBindTerm*>(command.get());
-                // TODO: support constants
-                assert(cb->term->getType() == TermType::FUNC);
+                if (cb->term->getType() == TermType::VALUE) {
+                    auto value = dynamic_cast<TmValue*>(cb->term.get());
+                    out << "static " << cb->name << ": ";
+                    if (dynamic_cast<incre::semantics::VInt*>(value->v.get())) {
+                        out << "i32 = " << value->v.toString() << ";\n";
+                    } else if (dynamic_cast<incre::semantics::VBool*>(value->v.get())) {
+                        out << "bool = " << (value->v.isTrue() ? "true" : "false") << ";\n";
+                    } else {
+                        LOG(FATAL) << "unknown value " << value->v.toString();
+                    }
+                    rust_ctx = rust_ctx.insert(cb->name, std::format("Rc::new({})", cb->name));
+                } else {
+                    assert(cb->term->getType() == TermType::FUNC);
 
-                MatchTermNormalizer rewriter;
-                auto new_term = rewriter.rewrite(cb->term);
-                // LOG(INFO) << "init term " << cb->term->toString();
-                // LOG(INFO) << "normalized term " << new_term->toString();
-                auto [new_context, related_functions] = util::function2Rust(new_term, walker->ctx, command->name, rust_ctx, walker->getTypeChecker());
+                    MatchTermNormalizer rewriter;
+                    auto new_term = rewriter.rewrite(cb->term);
+                    // LOG(INFO) << "init term " << cb->term->toString();
+                    // LOG(INFO) << "normalized term " << new_term->toString();
+                    auto [new_context, related_functions] = util::function2Rust(new_term, walker->ctx, command->name,
+                                                                                rust_ctx, walker->getTypeChecker());
 
-                for (auto& function_result: related_functions) {
-                    out << function_result << "\n";
+                    for (auto &function_result: related_functions) {
+                        out << function_result << "\n";
+                    }
+                    rust_ctx = new_context;
                 }
-                rust_ctx = new_context;
             }
         }
 

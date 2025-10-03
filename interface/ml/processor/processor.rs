@@ -31,7 +31,7 @@ pub trait Processor {
             Term::Match { def, cases } => {
                 let new_def = self.process_term(def);
                 let new_cases = cases.iter().map(
-                    |(pattern, case)| (pattern.clone(), self.process_term(case))
+                    |(pattern, case)| (self.process_pattern(pattern), self.process_term(case))
                 ).collect();
                 with_span!(term.span, Term::Match { def: new_def, cases: new_cases })
             },

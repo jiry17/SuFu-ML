@@ -25,7 +25,7 @@ fn main() {
     /*if args.len() != 3 {
         args = vec![
             "".to_string(),
-            format!("{SRC}/benchmarks/2.ml"),
+            format!("{SRC}/benchmarks/1.ml"),
             format!("{SRC}/benchmarks/oup.json"),
         ];
     }*/
@@ -46,7 +46,7 @@ fn main() {
         .unwrap();
 
     let program = surface_to_internal(&program);
-    //println!("{}", ProgramPrinter::pretty_print(&program, 20));
+    // println!("{}", ProgramPrinter::pretty_print(&program, 100));
     //println!("{:?}", program.last().unwrap());
 
     let file = File::create(oup_file).unwrap();

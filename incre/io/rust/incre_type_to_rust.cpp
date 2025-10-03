@@ -72,9 +72,21 @@ namespace {
         int param_index = ctx.param_infos.size();
         auto param_name = _getParamName(param_index);
         ctx.param_infos.emplace_back(param_name, "");
-        auto inp = _buildTypeSignature(type->inp.get(), ctx);
-        auto oup = _buildTypeSignature(type->oup.get(), ctx);
-        auto def = "Fn(" + inp + ") -> " + oup;
+
+        std::vector<std::string> inp_list;
+        TypeData* current_type = type;
+        while (current_type->getType() == TypeType::ARR) {
+            auto* ta = dynamic_cast<TyArr*>(current_type);
+            inp_list.push_back(_buildTypeSignature(ta->inp.get(), ctx));
+            current_type = ta->oup.get();
+        }
+
+        auto oup = _buildTypeSignature(current_type, ctx);
+        std::string def = "Fn(";
+        for (int i = 0; i < inp_list.size(); ++i) {
+            if (i) def += ", "; def += inp_list[i];
+        }
+        def += ") -> " + oup;
         ctx.param_infos[param_index].second = def;
         return util::wrapWithRc(param_name);
     }

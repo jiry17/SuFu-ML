@@ -3,7 +3,7 @@ use chumsky::error::Rich;
 use chumsky::{extra, select_ref, Parser, IterParser};
 use chumsky::input::BorrowInput;
 use chumsky::prelude::{choice, just, SimpleSpan};
-use crate::language::{Command, DecoratedCommand, Program, SpanCommand, SpanTerm, SpanType, Spanned, Token, Type, WithSpan};
+use crate::language::{Command, ConfigVal, DecoratedCommand, Program, SpanCommand, SpanTerm, SpanType, Spanned, Token, Type, WithSpan};
 use crate::parser::pattern_parser::make_pattern_parser;
 use crate::parser::term_parser::{make_bind_parser, make_cases_parser, make_term_parser};
 use crate::parser::type_parser::make_type_parser;
@@ -34,16 +34,36 @@ where
     let var_list = choice((single_var, multi_var));
 
     let type_parser = make_type_parser(make_input.clone());
+    // config parser
+    let config_value_parser = select_ref! {
+        Token::BoolVal(val) => ConfigVal::Bool(*val),
+        Token::IntVal(val) => ConfigVal::Int(*val)
+    };
+    let config_name_parser = select_ref! {
+        Token::Id(name) => name.clone(),
+        Token::Cons(name) => name.clone()
+    };
+    let config_parser = just(Token::Config)
+        .ignore_then(config_name_parser)
+        .then_ignore(just(Token::Eq))
+        .then(config_value_parser)
+        .map_with(
+            |(config_name, config_val), e| {
+                let command = Command::Config {name: config_name, val: config_val};
+                spanned!(e, command)
+            }
+        );
+
     // type rename
     let type_alias_parser = just(Token::Type)
-        .ignore_then(var_list.clone())
+        .ignore_then(var_list.clone().or_not())
         .then(id)
         .then_ignore(just(Token::Eq))
         .then(type_parser.clone())
         .map_with(
-            |((params, name), type_info), e| {
+            |((_params, name), type_info), e| {
                 let mut new_type = type_info.clone();
-                if !params.is_empty() {
+                if let Some(params) = _params {
                     new_type = Rc::new(WithSpan::new(
                         type_info.span.clone(), Type::Poly {vars: params, body: new_type}
                     ));
@@ -65,13 +85,14 @@ where
         .at_least(1)
         .collect::<Vec<_>>();
     let type_def_parser = just(Token::Type)
-        .ignore_then(var_list)
+        .ignore_then(var_list.or_not())
         .then(id)
         .then_ignore(just(Token::Eq))
         .then_ignore(just(Token::Vbar).or_not())
         .then(cons_list_parser)
         .map_with(
-            |((params, type_name), mut cons_list), e| {
+            |((_params, type_name), mut cons_list), e| {
+                let params = if let Some(xs) = _params {xs} else {vec![]};
                 let mut cons_infos = vec![];
                 let var_list: Vec<_> = params.iter().map(
                     |var_name| spanned!(e, Type::Var(var_name.clone()))
@@ -123,7 +144,7 @@ where
         |bind, e| spanned!(e, Command::TermDef(bind))
     );
 
-    choice ((type_alias_parser, type_def_parser, type_declare_parser, term_bind_parser, term_eval_parser))
+    choice ((config_parser, type_alias_parser, type_def_parser, type_declare_parser, term_bind_parser, term_eval_parser))
 }
 
 pub fn make_program_parser<'tokens, 'src: 'tokens, I, M>(

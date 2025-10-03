@@ -298,6 +298,45 @@ IncreProgram util::removeTrivialLetForProgram(IncreProgramData *program) {
 }
 
 namespace {
+    CommandList _removeUseless(const CommandList& commands) {
+        std::unordered_set<std::string> useful_names;
+        auto size = commands.size(); assert(size);
+        useful_names.insert(commands[size - 1]->name);
+        for (auto& command: commands) {
+            if (command->isDecrorateWith(CommandDecorate::START)) {
+                useful_names.insert(command->name);
+            }
+        }
+
+        while (1) {
+            auto pre_size = useful_names.size();
+            for (auto& command: commands) {
+                if (command->getType() != CommandType::BIND_TERM) continue;
+                if (!useful_names.contains(command->name)) continue;
+                auto* cb = dynamic_cast<CommandBindTerm*>(command.get());
+                auto free_variables = util::getFreeVariables(cb->term.get());
+                for (auto& name: free_variables) useful_names.insert(name);
+            }
+            if (useful_names.size() == pre_size) break;
+        }
+
+        CommandList result;
+        for (auto& command: commands) {
+            if (command->getType() == CommandType::DEF_IND) {
+                result.push_back(command);
+            } else if (useful_names.contains(command->name)) {
+                result.push_back(command);
+            }
+        }
+        return result;
+    }
+}
+
+IncreProgram util::removeUselessCommands(IncreProgramData* program) {
+    return std::make_shared<IncreProgramData>(_removeUseless(program->commands), program->config_map);
+}
+
+namespace {
     class _BoundEliminator: public IncreTypeRewriter {
     public:
         virtual Ty _rewrite(TyVar* type, const Ty& _type) override {

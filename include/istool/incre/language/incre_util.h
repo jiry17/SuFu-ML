@@ -15,6 +15,7 @@ namespace incre::util {
 
     syntax::Term removeTrivialLet(const syntax::Term& term);
     IncreProgram removeTrivialLetForProgram(IncreProgramData* program);
+    IncreProgram removeUselessCommands(IncreProgramData* program);
 
     syntax::Ty removeBoundedVar(const syntax::Ty& type);
 

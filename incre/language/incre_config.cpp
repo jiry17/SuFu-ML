@@ -10,6 +10,7 @@ using namespace incre::config;
 const std::string config::KDataSizeLimitName = "incre@data-size-limit";
 const std::string config::KIsNonLinearName = "incre@is-non-linear";
 const std::string config::KIsEnableFoldName = "incre@is-enable-fold";
+const std::string config::KIsEnableDeepCoder = "incre@is-enable-deepcoder";
 const std::string config::KSampleIntMaxName = "incre@sample-int-max";
 const std::string config::KSampleIntMinName = "incre@sample-int-min";
 const std::string config::KPrintAlignName = "incre@print-align";
@@ -24,6 +25,7 @@ namespace {
     const int KDefaultDataSizeLimit = 10;
     const bool KDefaultIsNonLinear = false;
     const bool KDefaultIsEnableFold = true;
+    const bool KDefaultIsEnableDeepCoder = false;
     const int KDefaultSampleIntMax = 5;
     const int KDefaultSampleIntMin = -5;
     const bool KDefaultIsPrintAlign = false;
@@ -51,7 +53,8 @@ IncreConfigMap config::buildDefaultConfigMap() {
             {IncreConfig::TERM_NUM, BuildData(Int, KDefaultMaxTermNum)},
             {IncreConfig::CLAUSE_NUM, BuildData(Int, KDefaultMaxClauseNum)},
             {IncreConfig::THREAD_NUM, BuildData(Int, KDefaultThreadNum)},
-            {IncreConfig::SLOW_COMBINE, BuildData(Bool, KDefaultSlowCombine)}
+            {IncreConfig::SLOW_COMBINE, BuildData(Bool, KDefaultSlowCombine)},
+            {IncreConfig::ENABLE_DEEPCODER, BuildData(Bool, KDefaultIsEnableDeepCoder)}
     };
 }
 
@@ -61,6 +64,7 @@ namespace {
             case IncreConfig::SAMPLE_SIZE: return config::KDataSizeLimitName;
             case IncreConfig::NON_LINEAR: return config::KIsNonLinearName;
             case IncreConfig::ENABLE_FOLD: return config::KIsEnableFoldName;
+            case IncreConfig::ENABLE_DEEPCODER: return config::KIsEnableDeepCoder;
             case IncreConfig::SAMPLE_INT_MIN: return config::KSampleIntMinName;
             case IncreConfig::SAMPLE_INT_MAX: return config::KSampleIntMaxName;
             case IncreConfig::PRINT_ALIGN: return config::KPrintAlignName;

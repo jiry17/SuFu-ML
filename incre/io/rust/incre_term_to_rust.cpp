@@ -97,6 +97,19 @@ namespace {
         return std::format("{}{}{}", l, inner, r);
     }
 
+    std::string _getOpName(const std::string& name) {
+        if (name == "and") return "&&";
+        if (name == "or") return "||";
+        if (name == "not") return "!";
+        return name;
+    }
+
+    Term _processLefDef(const std::string& current_name, const Term& term) {
+        if (term->getType() != TermType::FUNC) return term;
+        auto name = util::getAuxFuncName(false);
+        return incre::util::renameVariable(term, current_name, name);
+    }
+
     class _Term2RustWalker {
     public:
         std::vector<std::string> context_functions;
@@ -170,12 +183,12 @@ namespace {
         Term2RustHead(Primary) {
             if (term->params.size() == 1) {
                 auto content = rewrite(term->params[0], ctx);
-                return std::format("Rc::new({}{})", term->op_name, _extractOperand(content));
+                return std::format("Rc::new({}{})", _getOpName(term->op_name), _extractOperand(content));
             }
             if (term->params.size() == 2) {
                 auto x = _extractOperand(rewrite(term->params[0], ctx));
                 auto y = _extractOperand(rewrite(term->params[1], ctx));
-                return std::format("Rc::new({}{}{})", x, term->op_name, y);
+                return std::format("Rc::new({}{}{})", x, _getOpName(term->op_name), y);
             }
             throw TranslationError("unexpected operator " + term->op_name, full_term->toString());
         }
@@ -197,7 +210,7 @@ namespace {
         }
 
         Term2RustHead(Let) {
-            auto def = rewrite(term->def, ctx);
+            auto def = rewrite(_processLefDef(term->name, term->def), ctx);
             auto first_line = std::format("let {} = {};", term->name, def);
             auto new_ctx = ctx.insert(term->name, std::format("{}.clone()", term->name));
             auto second_line = _extractLetBody(rewrite(term->body, new_ctx));

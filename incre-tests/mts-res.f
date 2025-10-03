@@ -4,35 +4,25 @@ let fst = function
 let snd = function
 | (_, y) -> y
 
-type 'a list = Cons of 'a * 'a list | Nil
-let head = function
-| Cons (h, _) -> h
-
-val tails: int list -> int * int
-let rec tails = function
-| Nil -> (0, 0)
-| Cons (h, t) as xs ->
-  let m1 = tails t
-  in
-    (if fst m1 < h + snd m1
-       then h + snd m1
-       else fst m1,
-     h + snd m1)
-
-let rec sum = function
+type nat = Z | S of nat
+type list = Nil | Cons of int * list
+type indexed_list =
+| CNil
+| CCons of int * int * indexed_list
+val w: int
+let rec length = function
 | Nil -> 0
-| Cons (h, t) -> h + sum t
+| Cons (_, tl) -> 1 + length tl
 
-let max a b = if a <= b then b else a
-
-let rec maximum = function
+val repr: list -> int * int
+let rec repr = function
+| Nil -> (0, w)
 | Cons (h, t) ->
-  match t with
-  | Nil _ -> h
-  | _ -> max h (maximum t)
+  let m1 = length t
+  in
+    let m2 = repr t
+    in
+      (if snd m2 == h then m1 else fst m2,
+       snd m2)
 
-let rec map f = function
-| Nil -> Nil
-| Cons (h, t) -> Cons (f h, map f t)
-
-let mts xs = let m3 = tails xs in fst m3
+let prog xs = let m3 = repr xs in fst m3

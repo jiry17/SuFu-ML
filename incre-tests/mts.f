@@ -1,3 +1,5 @@
+config EnableDeepCoder = true
+
 type 'a list =
 | Cons of 'a * 'a list
 | Nil
@@ -21,7 +23,7 @@ let max a b =
 let rec maximum = function
 | Cons (h, t) ->
   match t with
-  | Nil _ -> h
+  | Nil -> h
   | _ -> max h (maximum t)
 
 let rec map f = function

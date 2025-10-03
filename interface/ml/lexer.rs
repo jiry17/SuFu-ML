@@ -15,6 +15,7 @@ pub fn lexer<'src>(
                 "unit" => Token::Unit,
                 "in" => Token::In,
                 "fun" => Token::Fun,
+                "config" => Token::Config,
                 "if" => Token::If,
                 "eval" => Token::Eval,
                 "then" => Token::Then,
@@ -48,7 +49,6 @@ pub fn lexer<'src>(
             just("()").to(Token::UnitVal),
             just("@").to(Token::Deco),
             just("==").to(Token::EqEq),
-            just("|").to(Token::Vbar),
             just("<=").to(Token::Leq),
             just(">=").to(Token::Geq),
             just("<").to(Token::Lq),
@@ -63,6 +63,7 @@ pub fn lexer<'src>(
             just(",").to(Token::Comma),
             just("_").to(Token::Wildcard),
             just("/").to(Token::Slash),
+            just("|").to(Token::Vbar),
             // Numbers
             just("-").or_not().then(text::int(10).to_slice())
                 .map(|s: (Option<&str>, &str)| {

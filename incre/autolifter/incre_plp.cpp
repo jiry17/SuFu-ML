@@ -136,6 +136,7 @@ Data FExampleSpace::runExtract(int example_id, Program *prog) {
 Data FExampleSpace::runAux(int example_id, const Data& content, Program *prog) {
     global::recorder.start("execute");
     auto& example = example_list[example_id];
+    // LOG(INFO) << "run Aux " << prog->toString() << " on " << content.toString();
     auto res = env->run(prog, data::concatDataList({content}, example->global_inputs));
     global::recorder.end("execute");
     return res;

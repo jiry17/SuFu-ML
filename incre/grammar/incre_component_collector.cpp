@@ -344,10 +344,11 @@ ComponentPool incre::grammar::collector::collectComponent(Env *env, IncreProgram
         }
 
         TyList possible_types = _groundTypes(type, basic_types);
-        LOG(INFO) << "possible types for " << name;
-        for (auto& possible_type: possible_types) LOG(INFO) << "  " << possible_type->toString();
+        // LOG(INFO) << "possible types for " << name;
+        // for (auto& possible_type: possible_types) LOG(INFO) << "  " << possible_type->toString();
         SynthesisComponentList components;
-        auto is_partial = command->isDecrorateWith(CommandDecorate::SYN_NO_PARTIAL);
+
+        auto is_partial = command->isDecrorateWith(CommandDecorate::ALLOW_PARTIAL);
         for (auto& incre_type: possible_types) {
             if (_isUnboundedType(incre_type.get())) continue;
             components.push_back(std::make_shared<IncreComponent>(name, incre::trans::typeFromIncre(incre_type.get()), value, command_id, is_partial));
@@ -360,4 +361,32 @@ ComponentPool incre::grammar::collector::collectComponent(Env *env, IncreProgram
 
     delete detector;
     return pool;
+}
+
+#include "istool/basic/config.h"
+#include "istool/incre/io/incre_json.h"
+
+namespace {
+    bool isListDef(incre::CommandData* command) {
+        return command->name == "list" && command->getType() == incre::CommandType::DEF_IND;
+    }
+}
+
+void incre::grammar::loadDeepCoderGrammar(incre::IncreProgramData *program) {
+    const std::string grammar_path = ::config::KSourcePath + "/incre/grammar/deepcoder-base.ml";
+    auto deepcoder_program = incre::io::parseFromF(grammar_path);
+
+    CommandList new_command_list;
+    bool is_inserted = false;
+    for (auto& command: program->commands) {
+        new_command_list.push_back(command);
+        if (isListDef(command.get())) {
+            assert(!is_inserted); is_inserted = true;
+            for (auto& new_command: deepcoder_program->commands) {
+                if (isListDef(new_command.get())) continue;
+                new_command_list.push_back(new_command);
+            }
+        }
+    }
+    program->commands = new_command_list;
 }

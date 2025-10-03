@@ -140,6 +140,8 @@ namespace incre::grammar {
         ComponentPool getBasicComponentPool(Env* env);
         ComponentPool collectComponent(Env* env, IncreProgramData* program);
     }
+
+    void loadDeepCoderGrammar(IncreProgramData* program);
 }
 
 #endif //ISTOOL_INCRE_GRAMMAR_BUILDER_H

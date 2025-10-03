@@ -18,7 +18,8 @@
 
 using namespace incre;
 
-DEFINE_string(benchmark, "/Users/pro/Desktop/work/2025S/SuFu-ML/incre-tests/mts.f", "The absolute path of the benchmark file (.sl)");
+DEFINE_string(benchmark, "/Users/pro/Desktop/work/2025A/ml-dataset/SuFu/ml-benchmark/synduce/indexed_list/search.ml", "The absolute path of the benchmark file (.sl)");
+// DEFINE_string(benchmark, "/Users/pro/Desktop/work/2025S/SuFu-ML/incre-tests/mts.f", "The absolute path of the benchmark file (.sl)");
 DEFINE_string(output, "/Users/pro/Desktop/work/2025S/SuFu-ML/incre-tests/mts-res.f", "The absolute path of the output file");
 DEFINE_bool(autolabel, true, "Whether automatically generate annotations");
 DEFINE_bool(mark_rewrite, false, "Whether to mark the sketch holes.");
@@ -47,6 +48,12 @@ int main(int argc, char** argv) {
     auto env = std::make_shared<Env>();
     env->setConst(solver::lia::KIsGurobiName, BuildData(Bool, false));
     incre::config::applyConfig(prog.get(), env.get());
+
+    if (env->getConstRef(incre::config::KIsEnableDeepCoder)->isTrue()) {
+        LOG(INFO) << "loading deepcoder operators";
+        incre::grammar::loadDeepCoderGrammar(prog.get());
+    }
+
 
     auto ctx = buildContext(prog.get(), [](){return new incre::semantics::DefaultEvaluator();},
                             [](){return new types::DefaultIncreTypeChecker();});
@@ -92,5 +99,6 @@ int main(int argc, char** argv) {
     auto res_prog = rewriteWithIncreSolution(incre_info->program.get(), res, is_highlight_replace);
 
     res_prog = incre::util::removeTrivialLetForProgram(res_prog.get());
+    res_prog = incre::util::removeUselessCommands(res_prog.get());
     incre::io::printProgram2F(target, res_prog.get(), is_highlight_replace);
 }

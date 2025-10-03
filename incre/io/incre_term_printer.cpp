@@ -160,7 +160,9 @@ namespace {
 
     const std::unordered_map<std::string, std::pair<int, std::vector<int>>> KPriorityMap = {
             {"or",  {0, {0, 0}}},
+            {"||",  {0, {0, 0}}},
             {"and", {1, {1, 1}}},
+            {"&&",  {1, {1, 1}}},
             {"not", {2, {2}}},
             {"<=",  {3, {4, 4}}},
             {"<",   {3, {4, 4}}},

@@ -1,110 +1,115 @@
 use std::rc::Rc;
-fn fst<T0, T1>(var0: Rc<(T0, T1)>) -> T0
+fn get_1_from_3<T0, T1, T2>(var0: Rc<(T0, T1, T2)>) -> T0
 where
     T0: Clone,
     T1: Clone,
+    T2: Clone,
 {
     match var0.as_ref() {
-        (y, _) => y.clone(),
+        (y, _, _) => y.clone(),
     }
 }
 
-fn snd<T0, T1>(var0: Rc<(T0, T1)>) -> T1
+fn get_2_from_3<T0, T1, T2>(var0: Rc<(T0, T1, T2)>) -> T1
 where
     T0: Clone,
     T1: Clone,
+    T2: Clone,
 {
     match var0.as_ref() {
-        (_, y) => y.clone(),
+        (_, y, _) => y.clone(),
+    }
+}
+
+fn get_3_from_3<T0, T1, T2>(var0: Rc<(T0, T1, T2)>) -> T2
+where
+    T0: Clone,
+    T1: Clone,
+    T2: Clone,
+{
+    match var0.as_ref() {
+        (_, _, y) => y.clone(),
     }
 }
 
 #[derive(Clone)]
 enum list<T0> {
-    Cons(Rc<(T0, Rc<list<T0>>)>),
     Nil(Rc<()>),
+    Cons(Rc<(T0, Rc<list<T0>>)>),
 }
-fn head<T0>(var0: Rc<list<T0>>) -> T0
-where
-    T0: Clone,
-{
+fn sum(var0: Rc<list<Rc<i32>>>) -> Rc<i32> {
     match var0.as_ref() {
+        list::Nil(_) => Rc::new(0),
         list::Cons(m0) => match m0.as_ref() {
-            (h, _) => h.clone(),
+            (hd, tl) => Rc::new(*hd.clone() + *((sum)(tl.clone()))),
         },
-        _ => panic!("unexpected case"),
     }
 }
 
-fn tails(var0: Rc<list<Rc<i32>>>) -> Rc<(Rc<i32>, Rc<i32>)> {
+fn max(a: Rc<i32>, b: Rc<i32>) -> Rc<i32> {
+    (if (*a.clone() > *b.clone()) {
+        a.clone()
+    } else {
+        b.clone()
+    })
+}
+
+fn mts(s: Rc<i32>, var0: Rc<list<Rc<i32>>>) -> Rc<i32> {
     match var0.as_ref() {
-        list::Nil(_) => Rc::new((Rc::new(0), Rc::new(0))),
+        list::Nil(_) => s.clone(),
         list::Cons(m0) => match m0.as_ref() {
-            (h, t) => {
-                let xs = Rc::new(list::Cons(Rc::new((h.clone(), t.clone()))));
-                let m1 = ((tails)(t.clone()));
-                Rc::new((
-                    (if (*((fst)(m1.clone())) < (*h.clone() + *((snd)(m1.clone())))) {
-                        Rc::new(*h.clone() + *((snd)(m1.clone())))
-                    } else {
-                        ((fst)(m1.clone()))
-                    }),
-                    Rc::new(*h.clone() + *((snd)(m1.clone()))),
+            (hd, tl) => {
+                ((mts)(
+                    ((max)(Rc::new(*s.clone() + *hd.clone()), Rc::new(0))),
+                    tl.clone(),
                 ))
             }
         },
     }
 }
 
-fn sum(var0: Rc<list<Rc<i32>>>) -> Rc<i32> {
+fn mps(var0: Rc<list<Rc<i32>>>) -> Rc<i32> {
     match var0.as_ref() {
         list::Nil(_) => Rc::new(0),
         list::Cons(m0) => match m0.as_ref() {
-            (h, t) => Rc::new(*h.clone() + *((sum)(t.clone()))),
+            (hd, tl) => ((max)(Rc::new(*((mps)(tl.clone())) + *hd.clone()), Rc::new(0))),
         },
     }
 }
 
-fn max(a: Rc<i32>, b: Rc<i32>) -> Rc<i32> {
-    (if (*a.clone() <= *b.clone()) {
-        b.clone()
-    } else {
-        a.clone()
-    })
+fn spec(l: Rc<list<Rc<i32>>>) -> Rc<(Rc<i32>, Rc<i32>)> {
+    Rc::new((((mts)(Rc::new(0), l.clone())), ((mps)(l.clone()))))
 }
 
-fn maximum(var0: Rc<list<Rc<i32>>>) -> Rc<i32> {
+fn repr(var0: Rc<list<Rc<i32>>>) -> Rc<(Rc<i32>, Rc<i32>, Rc<i32>)> {
     match var0.as_ref() {
+        list::Nil(_) => Rc::new((Rc::new(0), Rc::new(0), Rc::new(0))),
         list::Cons(m0) => match m0.as_ref() {
-            (h, t) => match t.as_ref() {
-                list::Nil(_) => h.clone(),
-                _ => ((max)(h.clone(), ((maximum)(t.clone())))),
-            },
-        },
-        _ => panic!("unexpected case"),
-    }
-}
-
-fn map<T0, T1, T2>(f: Rc<T0>, var0: Rc<list<T1>>) -> Rc<list<T2>>
-where
-    T0: Fn(T1) -> T2,
-    T1: Clone,
-    T2: Clone,
-{
-    match var0.as_ref() {
-        list::Nil(_) => Rc::new(list::Nil(Rc::new(()))),
-        list::Cons(m0) => match m0.as_ref() {
-            (h, t) => Rc::new(list::Cons(Rc::new((
-                ((*f.clone())(h.clone())),
-                ((map)(f.clone(), t.clone())),
-            )))),
+            (h, t) => {
+                let m1 = ((repr)(t.clone()));
+                Rc::new((
+                    (if (*((get_1_from_3)(m1.clone()))
+                        < (*h.clone() + *((get_3_from_3)(m1.clone()))))
+                    {
+                        Rc::new(*h.clone() + *((get_3_from_3)(m1.clone())))
+                    } else {
+                        ((get_1_from_3)(m1.clone()))
+                    }),
+                    (if ((0) < (*h.clone() + *((get_2_from_3)(m1.clone())))) {
+                        Rc::new(*h.clone() + *((get_2_from_3)(m1.clone())))
+                    } else {
+                        Rc::new(0)
+                    }),
+                    Rc::new(*h.clone() + *((get_3_from_3)(m1.clone()))),
+                ))
+            }
         },
     }
 }
 
-fn mts(xs: Rc<list<Rc<i32>>>) -> Rc<i32> {
+fn main(xs: Rc<list<Rc<i32>>>) -> Rc<(Rc<i32>, Rc<i32>)> {
     {
-        let m3 = ((tails)(xs.clone()));
-        ((fst)(m3.clone()))
+        let m2 = ((repr)(xs.clone()));
+        Rc::new((((get_1_from_3)(m2.clone())), ((get_2_from_3)(m2.clone()))))
     }
 }

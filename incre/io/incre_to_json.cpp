@@ -494,8 +494,8 @@ void incre::io::printProgram2F(const std::string &path, incre::IncreProgramData 
 
     std::string command = ::config::KIncrePrinterPath + " " + tmp_file + " " + path;
 
-    LOG(INFO) << command;
+    // LOG(INFO) << command;
 
     std::system(command.c_str());
-    // std::system(("rm " + tmp_file).c_str());
+    std::system(("rm " + tmp_file).c_str());
 }

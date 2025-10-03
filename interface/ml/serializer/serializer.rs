@@ -272,9 +272,6 @@ impl Serialize for ConfigVal {
             },
             ConfigVal::Bool(b) => {
                 serialize_struct!(serializer, "ConfigVal", "bool", 2, "value" => b)
-            },
-            ConfigVal::String(str) => {
-                serialize_struct!(serializer, "ConfigVal", "string", 2, "value" => str)
             }
         }
     }
@@ -300,14 +297,16 @@ impl Serialize for DecoratedCommand {
                 serialize_struct!(
                     serializer, "CommandTermDef",
                     if content.is_rec {"func"} else {"bind"},
-                    3,
+                    4,
+                    "decos" => &self.decos,
                     "name" => &content.name,
                     "def" => &term.content
                 )
             }
             Command::TypeDeclare {name, ty} => {
                 serialize_struct!(
-                    serializer, "CommandTypeDeclare", "declare", 3,
+                    serializer, "CommandTypeDeclare", "declare", 4,
+                    "decos" => &self.decos,
                     "name" => name,
                     "ty" => &ty.content
                 )
@@ -317,15 +316,17 @@ impl Serialize for DecoratedCommand {
                     .map(|info| ConsInfo::from_info(info))
                     .collect();
                 serialize_struct!(
-                    serializer, "CommandTypeDef", "type", 4,
+                    serializer, "CommandTypeDef", "type", 5,
                     "name" => name,
+                    "decos" => &self.decos,
                     "arity" => arity,
                     "cons" => cons_list
                 )
             }
             Command::TermEval(term) => {
                 serialize_struct!(
-                    serializer, "TermEval", "eval", 2,
+                    serializer, "TermEval", "eval", 3,
+                    "decos" => &self.decos,
                     "term" => &term.content
                 )
             }

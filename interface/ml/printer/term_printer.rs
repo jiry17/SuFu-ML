@@ -58,8 +58,16 @@ impl Term {
                 "not" => 3, "*" => 10,
                 "/" => 10, "+" => 5,
                 "==" | "<" | ">" | "<=" | ">=" => 4,
-                "&&" => 2, "||" => 1,
+                "&&" | "and" => 2, "||" | "or" => 1,
                 _ => panic!("unknown operator {}", op)
+            }
+        }
+
+        fn get_op_name(op: &str) -> &str {
+            match op {
+                "and" => "&&",
+                "or" => "||",
+                _ => op
             }
         }
 
@@ -79,6 +87,7 @@ impl Term {
                 let current_pri = get_op_pri(op, 2);
                 let (left_pri, mut left_res) = params[0].content.arith_to_doc();
                 let (right_pri, mut right_res) = params[1].content.arith_to_doc();
+                let op = get_op_name(op);
                 if left_pri < current_pri {
                     left_res = rc::text("(").append(left_res).append(rc::text(")"));
                 }
@@ -207,7 +216,6 @@ impl Display for ConfigVal {
         match self {
             ConfigVal::Int(i) => write!(f, "{}", i),
             ConfigVal::Bool(b) => write!(f, "{}", if *b {"true"} else {"false"}),
-            ConfigVal::String(s) => write!(f, "\"{}\"", s),
         }
     }
 }
@@ -216,7 +224,7 @@ impl Command {
     fn to_doc(&self) -> rc<()> {
         match self {
             Command::Config {name, val} => {
-                let str = format!("@{} = {}", name, val);
+                let str = format!("config {} = {}", name, val);
                 rc::text(str)
             }
             Command::TermDef(bind) => {

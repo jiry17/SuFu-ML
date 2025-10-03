@@ -255,13 +255,13 @@ namespace {
             {"EnableFold", IncreConfig::ENABLE_FOLD}, {"SampleIntMin", IncreConfig::SAMPLE_INT_MIN},
             {"SampleIntMax", IncreConfig::SAMPLE_INT_MAX}, {"PrintAlign", IncreConfig::PRINT_ALIGN},
             {"TermNum", IncreConfig::TERM_NUM}, {"ClauseNum", IncreConfig::CLAUSE_NUM},
-            {"SlowCombine", IncreConfig::SLOW_COMBINE}
+            {"SlowCombine", IncreConfig::SLOW_COMBINE}, {"EnableDeepCoder", IncreConfig::ENABLE_DEEPCODER}
     };
 
     const std::unordered_map<std::string, CommandDecorate> KIncreDecorateNameMap {
             {"Input", CommandDecorate::INPUT}, {"Start", CommandDecorate::START},
             {"Compress", CommandDecorate::SYN_COMPRESS}, {"Combine", CommandDecorate::SYN_COMBINE},
-            {"Extract", CommandDecorate::SYN_EXTRACT}, {"NoPartial", CommandDecorate::SYN_NO_PARTIAL},
+            {"Extract", CommandDecorate::SYN_EXTRACT}, {"WithPartial", CommandDecorate::ALLOW_PARTIAL},
             {"Exclude", CommandDecorate::SYN_EXCLUDE}
     };
 }

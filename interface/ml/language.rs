@@ -18,7 +18,7 @@ pub enum Token {
     Eq, Plus, Times, Dot, Int, Bool, Unit, Dash,
     Slash, EqEq, Lq, Leq, Gq, Geq, And, Or, Not,
     Arrow, Comma, Wildcard, As, Rec, Vbar,
-    Match, With, Function, Type, Val, Colon, Deco
+    Match, With, Function, Type, Val, Colon, Deco, Config
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -120,7 +120,7 @@ pub type SpanBind = Spanned<Bind>;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum ConfigVal {
-    Int(i32), Bool(bool), String(String)
+    Int(i32), Bool(bool)
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -195,6 +195,7 @@ impl fmt::Display for Token {
             Token::Match => write!(f, "match"),
             Token::With => write!(f, "with"),
             Token::Gq => write!(f, ">"),
+            Token::Config => write!(f, "config"),
             Token::Leq => write!(f, "<="),
             Token::Geq => write!(f, ">="),
             Token::And => write!(f, "&&"),

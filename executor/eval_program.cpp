@@ -51,5 +51,5 @@ int main(int argc, char** argv) {
     prog = rewriteProgram(prog.get(), [](){return new TypeLabelRemover();}, [](){return new TermLabelRemover();});
     prog = runProgram(prog.get(), new DefaultEvaluator(), new DefaultIncreTypeChecker());
 
-    incre::io::printProgram2F(target, prog.get());
+    incre::io::printProgram2F(target, prog.get(), false);
 }

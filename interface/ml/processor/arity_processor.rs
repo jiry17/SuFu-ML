@@ -47,6 +47,7 @@ impl Processor for RemoverZeroArity {
     }
 
     fn process_term(&mut self, term: &SpanTerm) -> SpanTerm {
+        // println!("processing {}", term.content.to_pretty(100));
         match &term.content {
             Term::App(f, p) => {
                 if let Term::NativeCons(name) = &f.content {

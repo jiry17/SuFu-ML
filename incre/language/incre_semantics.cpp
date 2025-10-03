@@ -69,6 +69,7 @@ Data incre::semantics::invokePrimary(const std::string &name, const DataList &pa
     INT_BINARY(">", >, Bool); INT_BINARY(">=", >=, Bool);
     if (name == "neg") return BuildData(Int, -theory::clia::getIntValue(params[0]));
     BOOL_BINARY("and", &&); BOOL_BINARY("or", ||);
+    BOOL_BINARY("&&", &&); BOOL_BINARY("||", ||);
     if (name == "not") return BuildData(Bool, !params[0].isTrue());
     LOG(FATAL) << "unknown primary operator " << name;
 }
