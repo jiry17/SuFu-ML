@@ -4,25 +4,46 @@ let fst = function
 let snd = function
 | (_, y) -> y
 
-type nat = Z | S of nat
-type list = Nil | Cons of int * list
-type indexed_list =
-| CNil
-| CCons of int * int * indexed_list
-val w: int
-let rec length = function
-| Nil -> 0
-| Cons (_, tl) -> 1 + length tl
+let max a b = if a > b then a else b
 
-val repr: list -> int * int
-let rec repr = function
-| Nil -> (0, w)
-| Cons (h, t) ->
-  let m1 = length t
+let min a b = if a < b then a else b
+
+type list = Elt of int | Cons of int * list
+type nested_list =
+| Line of list
+| NCons of list * nested_list
+let fi = function
+| (x, _) -> x
+
+let se = function
+| (_, y) -> y
+
+let rec interval = function
+| Elt x -> (x, x)
+| Cons (hd, tl) ->
+  let res = interval tl
   in
-    let m2 = repr t
-    in
-      (if snd m2 == h then m1 else fst m2,
-       snd m2)
+    let lo = fi res
+    in let hi = se res in (min hd lo, max hd hi)
 
-let prog xs = let m3 = repr xs in fst m3
+val repr: nested_list -> int * int
+let rec repr = function
+| Line x ->
+  let info = interval x
+  in
+    let c0 = fst info
+    in let c1 = snd info in (c0, c1)
+| NCons (h, t) ->
+  let info = interval h
+  in
+    let m1 = repr t
+    in
+      let c0 = fst info
+      in
+        let c1 = snd info
+        in
+          (fst m1 + c0 - max (fst m1) c0,
+           max (snd m1) c1)
+
+let prog xs =
+  let m2 = repr xs in (fst m2, snd m2, false)

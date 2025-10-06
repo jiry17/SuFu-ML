@@ -262,7 +262,7 @@ namespace {
             {"Input", CommandDecorate::INPUT}, {"Start", CommandDecorate::START},
             {"Compress", CommandDecorate::SYN_COMPRESS}, {"Combine", CommandDecorate::SYN_COMBINE},
             {"Extract", CommandDecorate::SYN_EXTRACT}, {"WithPartial", CommandDecorate::ALLOW_PARTIAL},
-            {"Exclude", CommandDecorate::SYN_EXCLUDE}
+            {"Exclude", CommandDecorate::SYN_EXCLUDE}, {"Align", CommandDecorate::SYN_COMPRESS}
     };
 }
 

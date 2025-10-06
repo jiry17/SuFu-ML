@@ -18,7 +18,7 @@
 
 using namespace incre;
 
-DEFINE_string(benchmark, "/Users/pro/Desktop/work/2025A/ml-dataset/SuFu/ml-benchmark/synduce/indexed_list/search.ml", "The absolute path of the benchmark file (.sl)");
+DEFINE_string(benchmark, "/Users/pro/Desktop/work/2025A/ml-dataset/SuFu/ml-benchmark/synduce/nested_list/pyramid_intervals.ml", "The absolute path of the benchmark file (.sl)");
 // DEFINE_string(benchmark, "/Users/pro/Desktop/work/2025S/SuFu-ML/incre-tests/mts.f", "The absolute path of the benchmark file (.sl)");
 DEFINE_string(output, "/Users/pro/Desktop/work/2025S/SuFu-ML/incre-tests/mts-res.f", "The absolute path of the output file");
 DEFINE_bool(autolabel, true, "Whether automatically generate annotations");
@@ -77,6 +77,7 @@ int main(int argc, char** argv) {
     for (int i = 0; i < 10; ++i) {
         std::cout << "Start # " << i << ": " << incre_info->example_pool->generateStart().first->toString() << std::endl;
     }
+
     for (int i = 0; i < 10; ++i) {
         incre_info->example_pool->generateSingleExample();
     }
