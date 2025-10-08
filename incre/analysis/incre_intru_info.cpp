@@ -118,7 +118,7 @@ namespace {
         virtual Term _rewrite(TmRewrite* term, const Term& _term) {
             int index = rewrite_index++;
             auto it = info->term_context_map.find(term);
-            rewrite_raw_list.emplace_back(index, it->second, info->term_type_map[term]);
+            rewrite_raw_list.emplace_back(command_id, it->second, info->term_type_map[term]);
             return std::make_shared<TmLabeledRewrite>(rewrite(term->body), index);
         }
     };
@@ -257,6 +257,7 @@ IncreInputInfo input_filter::buildInputInfo(const IncreContext &local_ctx, const
 #include "istool/sygus/theory/basic/theory_semantics.h"
 #include "istool/ext/deepcoder/deepcoder_semantics.h"
 #include "istool/incre/io/incre_printer.h"
+#include <iostream>
 
 IncreInfo analysis::buildIncreInfo(IncreProgramData *program, Env* env) {
     auto* collector = new IncreInfoCollector();

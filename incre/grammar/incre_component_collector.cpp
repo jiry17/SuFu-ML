@@ -295,6 +295,16 @@ namespace {
     }
 }
 
+namespace {
+    std::string _componentType2String(const GrammarType& type) {
+        switch (type) {
+            case GrammarType::COMBINE: return "combine";
+            case GrammarType::COMPRESS: return "compress";
+            case GrammarType::EXTRACT: return "extract";
+        }
+    }
+}
+
 #include <iostream>
 ComponentPool incre::grammar::collector::collectComponent(Env *env, IncreProgramData *program) {
     ComponentPool pool = incre::grammar::collector::getBasicComponentPool(env);
@@ -344,8 +354,6 @@ ComponentPool incre::grammar::collector::collectComponent(Env *env, IncreProgram
         }
 
         TyList possible_types = _groundTypes(type, basic_types);
-        // LOG(INFO) << "possible types for " << name;
-        // for (auto& possible_type: possible_types) LOG(INFO) << "  " << possible_type->toString();
         SynthesisComponentList components;
 
         auto is_partial = command->isDecrorateWith(CommandDecorate::ALLOW_PARTIAL);

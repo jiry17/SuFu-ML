@@ -268,9 +268,9 @@ void ComponentPool::print() const {
     std::vector<std::pair<std::string, SynthesisComponentList>> all_components = {
             {"extract", extract_list}, {"compress", comp_list}, {"comb", comb_list}
     };
-    for (auto& [name, comp_list]: all_components) {
-        std::cout << "Components for " << name << ":" << std::endl;
-        for (auto& comp: comp_list) {
+    for (auto& [name, clist]: all_components) {
+        std::cout << "Components for " << name << "@" << clist.size() << ":" << std::endl;
+        for (auto& comp: clist) {
             auto* uc = dynamic_cast<IncreComponent*>(comp.get());
             if (uc) std::cout << "  " << uc->name << " " << type::typeList2String(uc->param_types) << " -> " << uc->res_type->getName() << " " << uc->command_id << std::endl;
             auto* bc = dynamic_cast<BasicOperatorComponent*>(comp.get());

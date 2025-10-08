@@ -339,13 +339,6 @@ void IncrePLPSolver::getMoreComponent() {
     if (current_size >= KDelta) unit_storage.push_back(mergeUnits(current_size - KDelta, 0));
 
     for (auto& unit: _randomMerge(unit_storage, env)) {
-        /*if (dynamic_cast<TBool*>(unit.program.second.first.get())) {
-            LOG(INFO) << "new bool component " << aux2String(unit.program) << " " << unit.info.toString();
-            int kk; std::cin >> kk;
-        }*/
-        //LOG(INFO) << "new component " << aux2String(unit.program) << " " << unit.info.toString();
-        //LOG(INFO) << evaluate_util->execute(unit.program, example_list[0].first).toString() << " " << evaluate_util->execute(unit.program, example_list[1].first).toString();
-        //int kk; std::cin >> kk;
         component_info_list.push_back(unit);
     }
 }

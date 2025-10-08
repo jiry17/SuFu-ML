@@ -188,6 +188,9 @@ Grammar *ComponentPool::buildExtractGrammar(const TypeList &inp_list, int comman
     return _buildGrammar(inp_list, component_list, _isCompressOrPrimaryType, nullptr);
 }
 
+#include "glog/logging.h"
+#include <iostream>
+
 Grammar *ComponentPool::buildCombGrammar(const TypeList &inp_list, const PType &oup_type, int command_id) {
     SynthesisComponentList component_list;
     for (auto& component: comb_list) {
@@ -195,6 +198,8 @@ Grammar *ComponentPool::buildCombGrammar(const TypeList &inp_list, const PType &
             component_list.push_back(component);
         }
     }
+
+
     return _buildGrammar(inp_list, component_list, [&](Type* type){return type::equal(type, oup_type.get());}, oup_type);
 }
 

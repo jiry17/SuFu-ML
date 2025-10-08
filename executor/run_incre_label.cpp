@@ -18,7 +18,7 @@
 
 using namespace incre;
 
-DEFINE_string(benchmark, "/Users/pro/Desktop/work/2025A/ml-dataset/SuFu/ml-benchmark/synduce/nested_list/pyramid_intervals.ml", "The absolute path of the benchmark file (.sl)");
+DEFINE_string(benchmark, "/Users/pro/Desktop/work/2025A/ml-dataset/SuFu/ml-benchmark/synduce/list/bal.ml", "The absolute path of the benchmark file (.sl)");
 // DEFINE_string(benchmark, "/Users/pro/Desktop/work/2025S/SuFu-ML/incre-tests/mts.f", "The absolute path of the benchmark file (.sl)");
 DEFINE_string(output, "/Users/pro/Desktop/work/2025S/SuFu-ML/incre-tests/mts-res.f", "The absolute path of the output file");
 DEFINE_bool(autolabel, true, "Whether automatically generate annotations");
