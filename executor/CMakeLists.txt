@@ -9,7 +9,7 @@ add_executable(run run_incre_label.cpp)
 target_link_libraries(run ${ALL_LIBS} ${ALL_LIBS} ${THIRDPARTY_LIBS})
 
 add_executable(eval eval_program.cpp)
-target_link_libraries(eval ${ALL_LIBS} ${aLL_LIBS} ${THIRDPARTY_LIBS})
+target_link_libraries(eval ${ALL_LIBS} ${ALL_LIBS} ${THIRDPARTY_LIBS})
 
 add_executable(run_rust test_rust_trans.cpp)
-target_link_libraries(run_rust ${ALL_LIBS} ${aLL_LIBS} ${THIRDPARTY_LIBS})
+target_link_libraries(run_rust ${ALL_LIBS} ${ALL_LIBS} ${THIRDPARTY_LIBS})
