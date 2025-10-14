@@ -156,8 +156,8 @@ namespace {
     JsonTermHead(Value) {
         auto name = node["type"].asString();
         Data v;
-        if (name == "true") v = BuildData(Bool, false);
-        else if (name == "false") v = BuildData(Bool, true);
+        if (name == "true") v = BuildData(Bool, true);
+        else if (name == "false") v = BuildData(Bool, false);
         else if (name == "unit") v = Data(std::make_shared<VUnit>());
         else if (name == "int") v = BuildData(Int, node["value"].asInt());
         else throw IncreParseError("Unknown value " + name);

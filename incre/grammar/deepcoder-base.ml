@@ -9,6 +9,8 @@ type 'a list =
 @Combine let lib_inf = 100
 @Exclude let lib_err = 100
 
+@Combine let is_err x = (x == lib_err) || (x == 0-lib_err)
+
 @Align
 let lib_plus a b = a + b
 
@@ -138,7 +140,7 @@ let rec lib_scanr op = function
   | Cons (ih, it) ->
     let res = lib_scanr op t in
     match res with
-    | Cons (rh, _) -> Cons (op ih rh, res)
+    | Cons (rh, _) -> Cons (op h rh, res)
 
 @Align
 let lib_isneg a = a < 0

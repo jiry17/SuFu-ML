@@ -162,8 +162,10 @@ namespace {
 }
 
 void IncreExamplePool::generateBatchedExample(int rewrite_id, int target_num, TimeGuard *guard) {
+    LOG(INFO) << "finished " << is_finished[rewrite_id];
     if (is_finished[rewrite_id] || target_num < example_pool[rewrite_id].size()) return;
 
+    LOG(INFO) << "start add";
     std::mutex input_lock, res_lock;
     bool is_all_finished = false;
     int attempt_num = 0;

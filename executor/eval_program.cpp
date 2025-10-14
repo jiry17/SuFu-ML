@@ -39,7 +39,7 @@ public:
     }
 };
 
-DEFINE_string(benchmark, "/Users/pro/Desktop/work/2025S/SuFu-ML/incre-tests/res.f", "The absolute path of the benchmark file (.sl)");
+DEFINE_string(benchmark, "/Users/pro/Desktop/work/2025S/SuFu-ML/incre-tests/eval-test.f", "The absolute path of the benchmark file (.sl)");
 DEFINE_string(output, "/Users/pro/Desktop/work/2025S/SuFu-ML/incre-tests/eval.f", "The absolute path the output file");
 
 int main(int argc, char** argv) {

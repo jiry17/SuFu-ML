@@ -236,6 +236,19 @@ namespace {
                 return value;
             }
         }
+        {
+            auto *vt = dynamic_cast<incre::semantics::VTuple *>(term->v.get());
+            if (vt) {
+                InitJsonWithType("tuple");
+                Json::Value fields(Json::arrayValue);
+                for (auto& field: vt->elements) {
+                    auto sub_value = std::make_shared<TmValue>(field);
+                    fields.append(_term2json(sub_value.get(), indices));
+                }
+                value["fields"] = fields;
+                return value;
+            }
+        }
         LOG(ERROR) << "Unsupported value type " << term->toString();
         assert(0);
     }

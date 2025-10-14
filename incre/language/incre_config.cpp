@@ -78,6 +78,9 @@ namespace {
     }
 }
 
+#include "glog/logging.h"
+#include <iostream>
+
 void config::applyConfig(IncreProgramData *program, Env *env) {
     auto default_map = buildDefaultConfigMap();
     for (auto& [name, val]: default_map) {
@@ -85,6 +88,8 @@ void config::applyConfig(IncreProgramData *program, Env *env) {
         auto config_name = _getConfigName(name);
         if (it == program->config_map.end()) {
             env->setConst(config_name, val);
-        } else env->setConst(config_name, it->second);
+        } else {
+            env->setConst(config_name, it->second);
+        }
     }
 }

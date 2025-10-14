@@ -31,6 +31,7 @@ void FExampleSpace::addExample() {
     int index = example_list.size();
     example_list.push_back(pool->example_pool[rewrite_id][index]);
 }
+#include <iostream>
 int FExampleSpace::acquireExample(int target_num, TimeGuard *guard) {
     pool->generateBatchedExample(rewrite_id, target_num, guard);
     target_num = std::min(target_num, int(pool->example_pool[rewrite_id].size()));
